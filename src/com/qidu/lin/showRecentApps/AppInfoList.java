@@ -1,3 +1,5 @@
+// Copyright @ gooooloo
+
 package com.qidu.lin.showRecentApps;
 
 import java.util.ArrayList;
