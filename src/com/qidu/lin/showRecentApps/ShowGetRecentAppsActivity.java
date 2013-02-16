@@ -250,31 +250,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					}
 				}
 
-				if (hanyu.isEmpty())
-				{
-					for (String yy : stringsOfThisChar)
-					{
-						hanyu.add(yy);
-					}
-				}
-				else
-				{
-					String[] backup = new String[hanyu.size()];
-					int x = 0;
-					for (String abcsd : hanyu)
-					{
-						backup[x++] = abcsd;
-					}
-
-					hanyu.clear();
-					for (String zz : backup)
-					{
-						for (String yy : stringsOfThisChar)
-						{
-							hanyu.add(zz + yy);
-						}
-					}
-				}
+				hanyu = product(hanyu, stringsOfThisChar);
 			}
 
 			for (String xx : hanyu)
@@ -285,6 +261,29 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				}
 			}
 			return false;
+		}
+
+		public Set<String> product(Set<String> a, Set<String> b)
+		{
+			Set<String> ret = new HashSet<String>();
+			if (a.isEmpty())
+			{
+				for (String bb : b)
+				{
+					ret.add(bb);
+				}
+			}
+			else
+			{
+				for (String aa : a)
+				{
+					for (String bb : b)
+					{
+						ret.add(aa + bb);
+					}
+				}
+			}
+			return ret;
 		}
 	}
 
