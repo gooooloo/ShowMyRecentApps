@@ -1,39 +1,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="400dp" >
+    android:layout_height="400dp" xmlns:app="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps">
 
     <EditText
         android:id="@+id/dummy"
         android:layout_width="match_parent"
-        android:visibility="invisible"
-        android:layout_height="15dp" >
+        android:layout_height="15dp"
+        android:visibility="invisible" >
 
         <requestFocus />
-
     </EditText>
-    
+
     <EditText
-        android:layout_below="@id/dummy"
         android:id="@+id/searchView1"
         android:layout_width="match_parent"
-        android:hint="type to search app"
-        android:layout_height="wrap_content" >
-
-
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dummy"
+        android:hint="type to search app" >
     </EditText>
 
-    <GridView
-        android:layout_below="@id/searchView1"
+    <com.gridlayout.GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:gridlayout="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
         android:id="@+id/gridView1"
-        android:paddingTop="30dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/searchView1"
         android:horizontalSpacing="10dp"
+    gridlayout:columnCount="4"
         android:numColumns="4"
+        android:paddingTop="30dp"
         android:verticalSpacing="20dp" >
-    </GridView>
+    </com.gridlayout.GridLayout>
 
-</RelativeLayout>
-<!--         android:animateLayoutChanges="true" -->
-<!--         android:layoutAnimation="@anim/layoutanim" -->
+</RelativeLayout><!-- android:animateLayoutChanges="true" -->
+<!-- android:layoutAnimation="@anim/layoutanim" -->

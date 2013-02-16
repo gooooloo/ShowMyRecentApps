@@ -2,52 +2,122 @@
 
 package com.qidu.lin.showRecentApps;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import android.animation.LayoutTransition;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.gridlayout.GridLayout;
+
 public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
 {
-	public class AppsAdapter extends BaseAdapter
+	interface LayoutOper
 	{
-		private AppInfoList aaa = new AppInfoList();
+		void initView(View view);
 
-		public final int getCount()
+		void showView(View view);
+
+		void hideView(View view);
+	}
+
+	class MyLayoutOper implements LayoutOper
+	{
+
+		private final ViewGroup parentLayout;
+		private final Map<View, Pair<Boolean, Integer>> indeies = new HashMap<View, Pair<Boolean, Integer>>();
+
+		MyLayoutOper(ViewGroup parent)
 		{
-			return aaa.size();
+			this.parentLayout = parent;
 		}
 
-		public final Object getItem(int position)
+		@Override
+		public void showView(View view)
 		{
-			return aaa.get(position);
-		}
-
-		public final long getItemId(int position)
-		{
-			return position;
-		}
-
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			View view = convertView;
-			if (view == null)
+			if (!isViewShown(view))
 			{
-				view = getLayoutInflater().inflate(R.layout.entry, null);
+				parentLayout.addView(view, getShownIndex(view));
+				putViewShown(view, true);
 			}
+		}
 
-			AppInfoItem xxx = aaa.get(position);
+		private Boolean isViewShown(View view)
+		{
+			return indeies.get(view).first;
+		}
+
+		private void putViewShown(View view, boolean shown)
+		{
+			indeies.put(view, new Pair<Boolean, Integer>(shown, indeies.get(view).second));
+		}
+
+		private int getShownIndex(View view)
+		{
+			int cnt = 0;
+			int targetIndex = indeies.get(view).second;
+			for (Map.Entry<View, Pair<Boolean, Integer>> xx : indeies.entrySet())
+			{
+				if (xx.getValue().first && xx.getValue().second < targetIndex)
+				{
+					cnt++;
+				}
+			}
+			return cnt;
+		}
+
+		@Override
+		public void hideView(View view)
+		{
+
+			if (isViewShown(view))
+			{
+				putViewShown(view, false);
+				parentLayout.removeView(view);
+			}
+		}
+
+		@Override
+		public void initView(View view)
+		{
+			Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, indeies.size());
+			indeies.put(view, pair);
+		}
+
+	}
+
+	public class AppsAdapter
+	{
+		private final Map<View, String> views = new HashMap<View, String>();
+
+		final LayoutOper lo;
+
+		public AppsAdapter(LayoutOper lo)
+		{
+			this.lo = lo;
+		}
+
+		public View getView(final AppInfoItem xxx)
+		{
+			View view = getLayoutInflater().inflate(R.layout.entry, null);
 
 			CharSequence label = null;
 			Drawable icon = null;
@@ -74,18 +144,70 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			}
 
 			((TextView) view.findViewById(R.id.editText2)).setText("" + xxx.cnt);
+
+			view.setOnClickListener(new OnClickListener()
+			{
+
+				@Override
+				public void onClick(View arg0)
+				{
+					finishWithIntent(xxx.launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+				}
+			});
+
+			views.put(view, label.toString());
 			return view;
 		}
 
 		public void refreshWithData(AppInfoList result)
 		{
-			aaa.clear();
-			aaa.addAll(result);
-			notifyDataSetChanged();
+
+			for (int i = 0; i < result.size(); i++)
+			{
+				final AppInfoItem yyy = result.get(i);
+				new AsyncTask<Void, Void, View>()
+				{
+
+					@Override
+					protected void onPostExecute(View result)
+					{
+						lo.showView(result);
+					}
+
+					@Override
+					protected View doInBackground(Void... params)
+					{
+						View v = getView(yyy);
+						lo.initView(v);
+						return v;
+					}
+				}.execute();
+			}
+		}
+
+		public void onSearch(String string)
+		{
+			for (Map.Entry<View, String> xx : views.entrySet())
+			{
+				if (match(xx.getValue(), string))
+				{
+					lo.showView(xx.getKey());
+				}
+				else
+				{
+					lo.hideView(xx.getKey());
+				}
+			}
+		}
+
+		boolean match(String packageName, String string)
+		{
+			return packageName.toLowerCase().contains(string.toLowerCase());
+			// TODO : handle hanyu pinyin.
 		}
 	}
 
-	private AppsAdapter adapter = new AppsAdapter();
+	private AppsAdapter adapter = null;
 
 	private void finishWithIntent(Intent intent)
 	{
@@ -105,30 +227,40 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		adapter.refreshWithData(result);
 	}
 
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		
+
 		requestWindowFeature(Window.FEATURE_NO_TITLE);
-		
+
 		setContentView(R.layout.activity_test_get_recent_apps);
 
-		final GridView vv = (GridView) findViewById(R.id.gridView1);
+		final GridLayout vv = (GridLayout) findViewById(R.id.gridView1);
+		vv.setLayoutTransition(new LayoutTransition());
 
-		vv.setAdapter(adapter);
+		adapter = new AppsAdapter(new MyLayoutOper(vv));
 
-		vv.setOnItemClickListener(new OnItemClickListener()
+		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(new TextWatcher()
 		{
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2, long arg3)
-			{
-				AppInfoItem intent = (AppInfoItem) vv.getAdapter().getItem(arg2);
 
-				if (intent.launchIntent != null)
-				{
-					finishWithIntent(intent.launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-				}
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count)
+			{
+				// empty
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after)
+			{
+				// empty
+			}
+
+			@Override
+			public void afterTextChanged(Editable s)
+			{
+				adapter.onSearch(s.toString());
 			}
 		});
 
