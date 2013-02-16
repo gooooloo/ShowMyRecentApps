@@ -2,10 +2,8 @@
 
 package com.qidu.lin.showRecentApps;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
@@ -16,6 +14,7 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import android.animation.LayoutTransition;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -212,26 +211,16 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			}
 		}
 
-		boolean match(String packageName, String string)
+		private boolean match(String packageName, String string)
 		{
-			if (packageName.toLowerCase().contains(string.toLowerCase()))
+			if (doSimpleMatch(packageName, string))
 			{
 				return true;
 			}
 
-			Set<String> hanyu = new HashSet<String>();
-			for (int i = 0; i < packageName.length(); i++)
+			for (String xx : getHanyuPinyin(packageName))
 			{
-				char ch = packageName.charAt(i);
-
-				Set<String> stringsOfThisChar = translate(ch);
-
-				hanyu = product(hanyu, stringsOfThisChar);
-			}
-
-			for (String xx : hanyu)
-			{
-				if (xx.toLowerCase().contains(string.toLowerCase()))
+				if (doSimpleMatch(xx, string))
 				{
 					return true;
 				}
@@ -239,7 +228,22 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			return false;
 		}
 
-		public Set<String> translate(char ch)
+		public Set<String> getHanyuPinyin(String packageName)
+		{
+			Set<String> hanyu = new HashSet<String>();
+			for (int i = 0; i < packageName.length(); i++)
+			{
+				hanyu = product(hanyu, translate(packageName.charAt(i)));
+			}
+			return hanyu;
+		}
+
+		private boolean doSimpleMatch(String packageName, String string)
+		{
+			return packageName.toLowerCase().contains(string.toLowerCase());
+		}
+
+		private Set<String> translate(char ch)
 		{
 			HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
 			outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
@@ -263,7 +267,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				for (String pinyin : pinyinStrings)
 				{
 					ret.add(pinyin);
-					
+
 					// we also support the first charactor search for Pinyin
 					ret.add(pinyin.substring(0, 1));
 				}
@@ -271,7 +275,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			return ret;
 		}
 
-		public Set<String> product(Set<String> a, Set<String> b)
+		private Set<String> product(Set<String> a, Set<String> b)
 		{
 			Set<String> ret = new HashSet<String>();
 			if (a.isEmpty())
