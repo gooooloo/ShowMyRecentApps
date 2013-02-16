@@ -30,7 +30,7 @@ import com.gridlayout.GridLayout;
 
 public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
 {
-	interface LayoutOper
+	interface LayoutOperator
 	{
 		void initView(View view);
 
@@ -39,11 +39,11 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		void hideView(View view);
 	}
 
-	class MyLayoutOper implements LayoutOper
+	class MyLayoutOper implements LayoutOperator
 	{
 
 		private final ViewGroup parentLayout;
-		private final Map<View, Pair<Boolean, Integer>> indeies = new HashMap<View, Pair<Boolean, Integer>>();
+		private final Map<View, Pair<Boolean, Integer>> viewInfos = new HashMap<View, Pair<Boolean, Integer>>();
 
 		MyLayoutOper(ViewGroup parent)
 		{
@@ -55,28 +55,28 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		{
 			if (!isViewShown(view))
 			{
-				parentLayout.addView(view, getShownIndex(view));
+				parentLayout.addView(view, getShownViewCountAhead(view));
 				putViewShown(view, true);
 			}
 		}
 
 		private Boolean isViewShown(View view)
 		{
-			return indeies.get(view).first;
+			return viewInfos.get(view).first;
 		}
 
 		private void putViewShown(View view, boolean shown)
 		{
-			indeies.put(view, new Pair<Boolean, Integer>(shown, indeies.get(view).second));
+			viewInfos.put(view, new Pair<Boolean, Integer>(shown, viewInfos.get(view).second));
 		}
 
-		private int getShownIndex(View view)
+		private int getShownViewCountAhead(View view)
 		{
 			int cnt = 0;
-			int targetIndex = indeies.get(view).second;
-			for (Map.Entry<View, Pair<Boolean, Integer>> xx : indeies.entrySet())
+			int targetViewIndex = viewInfos.get(view).second;
+			for (Map.Entry<View, Pair<Boolean, Integer>> eachInfo : viewInfos.entrySet())
 			{
-				if (xx.getValue().first && xx.getValue().second < targetIndex)
+				if (eachInfo.getValue().first && eachInfo.getValue().second < targetViewIndex)
 				{
 					cnt++;
 				}
@@ -98,21 +98,21 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		@Override
 		public void initView(View view)
 		{
-			Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, indeies.size());
-			indeies.put(view, pair);
+			Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, viewInfos.size());
+			viewInfos.put(view, pair);
 		}
 
 	}
 
 	public class AppsAdapter
 	{
-		private final Map<View, String> views = new HashMap<View, String>();
+		private final Map<View, String> viewLabelMap = new HashMap<View, String>();
 
-		final LayoutOper lo;
+		final LayoutOperator layoutOperator;
 
-		public AppsAdapter(LayoutOper lo)
+		public AppsAdapter(LayoutOperator lo)
 		{
-			this.lo = lo;
+			this.layoutOperator = lo;
 		}
 
 		public View getView(final AppInfoItem xxx)
@@ -155,7 +155,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				}
 			});
 
-			views.put(view, label.toString());
+			viewLabelMap.put(view, label.toString());
 			return view;
 		}
 
@@ -171,14 +171,16 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					@Override
 					protected void onPostExecute(View result)
 					{
-						lo.showView(result);
+						layoutOperator.showView(result);
 					}
 
 					@Override
 					protected View doInBackground(Void... params)
 					{
 						View v = getView(yyy);
-						lo.initView(v);
+						
+						// TODO: consider thread problem.
+						layoutOperator.initView(v);
 						return v;
 					}
 				}.execute();
@@ -187,15 +189,15 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		public void onSearch(String string)
 		{
-			for (Map.Entry<View, String> xx : views.entrySet())
+			for (Map.Entry<View, String> xx : viewLabelMap.entrySet())
 			{
 				if (match(xx.getValue(), string))
 				{
-					lo.showView(xx.getKey());
+					layoutOperator.showView(xx.getKey());
 				}
 				else
 				{
-					lo.hideView(xx.getKey());
+					layoutOperator.hideView(xx.getKey());
 				}
 			}
 		}
