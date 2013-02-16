@@ -224,31 +224,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			{
 				char ch = packageName.charAt(i);
 
-				HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
-				outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-				outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
-				outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-
-				String[] pinyinStringArray = null;
-				try
-				{
-					pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
-				}
-				catch (BadHanyuPinyinOutputFormatCombination e)
-				{
-					e.printStackTrace();
-				}
-
-				Set<String> stringsOfThisChar = new HashSet<String>();
-				stringsOfThisChar.add(String.valueOf(ch));
-				if (pinyinStringArray != null)
-				{
-					for (String pinyin : pinyinStringArray)
-					{
-						stringsOfThisChar.add(pinyin);
-						stringsOfThisChar.add(pinyin.substring(0, 1));
-					}
-				}
+				Set<String> stringsOfThisChar = translate(ch);
 
 				hanyu = product(hanyu, stringsOfThisChar);
 			}
@@ -261,6 +237,36 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				}
 			}
 			return false;
+		}
+
+		public Set<String> translate(char ch)
+		{
+			HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
+			outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+			outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
+			outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+
+			String[] pinyinStringArray = null;
+			try
+			{
+				pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
+			}
+			catch (BadHanyuPinyinOutputFormatCombination e)
+			{
+				e.printStackTrace();
+			}
+
+			Set<String> stringsOfThisChar = new HashSet<String>();
+			stringsOfThisChar.add(String.valueOf(ch));
+			if (pinyinStringArray != null)
+			{
+				for (String pinyin : pinyinStringArray)
+				{
+					stringsOfThisChar.add(pinyin);
+					stringsOfThisChar.add(pinyin.substring(0, 1));
+				}
+			}
+			return stringsOfThisChar;
 		}
 
 		public Set<String> product(Set<String> a, Set<String> b)
