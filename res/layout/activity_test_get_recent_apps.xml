@@ -1,7 +1,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
     android:layout_width="match_parent"
-    android:layout_height="400dp" xmlns:app="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps">
+    android:layout_height="400dp" >
 
     <EditText
         android:id="@+id/dummy"
@@ -28,11 +29,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView1"
         android:horizontalSpacing="10dp"
-    gridlayout:columnCount="4"
         android:numColumns="4"
         android:paddingTop="30dp"
-        android:verticalSpacing="20dp" >
+        android:verticalSpacing="20dp"
+        gridlayout:columnCount="4" >
     </com.gridlayout.GridLayout>
 
-</RelativeLayout><!-- android:animateLayoutChanges="true" -->
-<!-- android:layoutAnimation="@anim/layoutanim" -->
+</RelativeLayout>
