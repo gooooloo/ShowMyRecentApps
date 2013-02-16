@@ -238,7 +238,9 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		setContentView(R.layout.activity_test_get_recent_apps);
 
 		final GridLayout vv = (GridLayout) findViewById(R.id.gridView1);
-		vv.setLayoutTransition(new LayoutTransition());
+		LayoutTransition layoutTransition = new LayoutTransition();
+		vv.setLayoutTransition(layoutTransition);
+		layoutTransition.setDuration(300);
 
 		adapter = new AppsAdapter(new MyLayoutOper(vv));
 
