@@ -2,9 +2,19 @@
 
 package com.qidu.lin.showRecentApps;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import net.sourceforge.pinyin4j.PinyinHelper;
+import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
+import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
+import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
+import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -178,7 +188,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					protected View doInBackground(Void... params)
 					{
 						View v = getView(yyy);
-						
+
 						// TODO: consider thread problem.
 						layoutOperator.initView(v);
 						return v;
@@ -204,8 +214,77 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		boolean match(String packageName, String string)
 		{
-			return packageName.toLowerCase().contains(string.toLowerCase());
-			// TODO : handle hanyu pinyin.
+			if (packageName.toLowerCase().contains(string.toLowerCase()))
+			{
+				return true;
+			}
+
+			Set<String> hanyu = new HashSet<String>();
+			for (int i = 0; i < packageName.length(); i++)
+			{
+				char ch = packageName.charAt(i);
+
+				HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
+				outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
+				outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
+				outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
+
+				String[] pinyinStringArray = null;
+				try
+				{
+					pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
+				}
+				catch (BadHanyuPinyinOutputFormatCombination e)
+				{
+					e.printStackTrace();
+				}
+
+				Set<String> stringsOfThisChar = new HashSet<String>();
+				stringsOfThisChar.add(String.valueOf(ch));
+				if (pinyinStringArray != null)
+				{
+					for (String pinyin : pinyinStringArray)
+					{
+						stringsOfThisChar.add(pinyin);
+						stringsOfThisChar.add(pinyin.substring(0, 1));
+					}
+				}
+
+				if (hanyu.isEmpty())
+				{
+					for (String yy : stringsOfThisChar)
+					{
+						hanyu.add(yy);
+					}
+				}
+				else
+				{
+					String[] backup = new String[hanyu.size()];
+					int x = 0;
+					for (String abcsd : hanyu)
+					{
+						backup[x++] = abcsd;
+					}
+
+					hanyu.clear();
+					for (String zz : backup)
+					{
+						for (String yy : stringsOfThisChar)
+						{
+							hanyu.add(zz + yy);
+						}
+					}
+				}
+			}
+
+			for (String xx : hanyu)
+			{
+				if (xx.toLowerCase().contains(string.toLowerCase()))
+				{
+					return true;
+				}
+			}
+			return false;
 		}
 	}
 
