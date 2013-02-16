@@ -246,27 +246,29 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
 			outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
 
-			String[] pinyinStringArray = null;
+			String[] pinyinStrings = null;
 			try
 			{
-				pinyinStringArray = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
+				pinyinStrings = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
 			}
 			catch (BadHanyuPinyinOutputFormatCombination e)
 			{
 				e.printStackTrace();
 			}
 
-			Set<String> stringsOfThisChar = new HashSet<String>();
-			stringsOfThisChar.add(String.valueOf(ch));
-			if (pinyinStringArray != null)
+			Set<String> ret = new HashSet<String>();
+			ret.add(String.valueOf(ch));
+			if (pinyinStrings != null)
 			{
-				for (String pinyin : pinyinStringArray)
+				for (String pinyin : pinyinStrings)
 				{
-					stringsOfThisChar.add(pinyin);
-					stringsOfThisChar.add(pinyin.substring(0, 1));
+					ret.add(pinyin);
+					
+					// we also support the first charactor search for Pinyin
+					ret.add(pinyin.substring(0, 1));
 				}
 			}
-			return stringsOfThisChar;
+			return ret;
 		}
 
 		public Set<String> product(Set<String> a, Set<String> b)
