@@ -21,18 +21,24 @@
         android:hint="type to search app" >
     </EditText>
 
-    <com.gridlayout.GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:gridlayout="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
-        android:id="@+id/gridView1"
-        android:layout_width="match_parent"
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/searchView1"
-        android:horizontalSpacing="10dp"
-        android:numColumns="4"
-        android:paddingTop="30dp"
-        android:verticalSpacing="20dp"
-        gridlayout:columnCount="4" >
-    </com.gridlayout.GridLayout>
+        android:layout_below="@id/searchView1" >
+
+        <com.gridlayout.GridLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:gridlayout="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
+            android:id="@+id/gridView1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="10dp"
+            android:numColumns="4"
+            android:paddingTop="30dp"
+            android:verticalSpacing="20dp"
+            gridlayout:columnCount="4" >
+        </com.gridlayout.GridLayout>
+    </ScrollView>
 
 </RelativeLayout>
