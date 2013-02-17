@@ -3,16 +3,8 @@
 package com.qidu.lin.showRecentApps;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
-import net.sourceforge.pinyin4j.PinyinHelper;
-import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinOutputFormat;
-import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
-import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
-import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
@@ -136,7 +128,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				return true;
 			}
 
-			for (String xx : getHanyuPinyin(packageName))
+			for (String xx : PinYinBridge.getHanyuPinyin(packageName))
 			{
 				if (doSimpleMatch(xx, string))
 				{
@@ -146,74 +138,9 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			return false;
 		}
 
-		public Set<String> getHanyuPinyin(String packageName)
-		{
-			Set<String> hanyu = new HashSet<String>();
-			for (int i = 0; i < packageName.length(); i++)
-			{
-				hanyu = product(hanyu, translate(packageName.charAt(i)));
-			}
-			return hanyu;
-		}
-
 		private boolean doSimpleMatch(String packageName, String string)
 		{
 			return packageName.toLowerCase().contains(string.toLowerCase());
-		}
-
-		private Set<String> translate(char ch)
-		{
-			HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
-			outputFormat.setToneType(HanyuPinyinToneType.WITHOUT_TONE);
-			outputFormat.setVCharType(HanyuPinyinVCharType.WITH_V);
-			outputFormat.setCaseType(HanyuPinyinCaseType.LOWERCASE);
-
-			String[] pinyinStrings = null;
-			try
-			{
-				pinyinStrings = PinyinHelper.toHanyuPinyinStringArray(ch, outputFormat);
-			}
-			catch (BadHanyuPinyinOutputFormatCombination e)
-			{
-				e.printStackTrace();
-			}
-
-			Set<String> ret = new HashSet<String>();
-			ret.add(String.valueOf(ch));
-			if (pinyinStrings != null)
-			{
-				for (String pinyin : pinyinStrings)
-				{
-					ret.add(pinyin);
-
-					// we also support the first charactor search for Pinyin
-					ret.add(pinyin.substring(0, 1));
-				}
-			}
-			return ret;
-		}
-
-		private Set<String> product(Set<String> a, Set<String> b)
-		{
-			Set<String> ret = new HashSet<String>();
-			if (a.isEmpty())
-			{
-				for (String bb : b)
-				{
-					ret.add(bb);
-				}
-			}
-			else
-			{
-				for (String aa : a)
-				{
-					for (String bb : b)
-					{
-						ret.add(aa + bb);
-					}
-				}
-			}
-			return ret;
 		}
 	}
 
