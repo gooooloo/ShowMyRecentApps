@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
+import android.graphics.drawable.Drawable;
 
 class AppInfoItem
 {
@@ -19,12 +20,12 @@ class AppInfoItem
 		this.cnt = cnt;
 		this.launchIntent = launchIntent;
 	}
-	
+
 	public static AppInfoItem makeInstance(String packageName, int cnt, Intent launchIntent)
 	{
 		return new AppInfoItem(packageName, cnt, launchIntent);
 	}
-	
+
 	public CharSequence getLabel(PackageManager pm)
 	{
 		ApplicationInfo applicationInfo = null;
@@ -37,6 +38,20 @@ class AppInfoItem
 			e.printStackTrace();
 		}
 		return pm.getApplicationLabel(applicationInfo);
+	}
+
+	public Drawable getIcon(PackageManager pm)
+	{
+		ApplicationInfo applicationInfo = null;
+		try
+		{
+			applicationInfo = pm.getApplicationInfo(packageName, 0);
+		}
+		catch (NameNotFoundException e)
+		{
+			e.printStackTrace();
+		}
+		return pm.getApplicationIcon(applicationInfo);
 	}
 
 }
