@@ -45,13 +45,13 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		void hideView(View view);
 	}
 
-	class MyLayoutOper implements LayoutOperator
+	class RecentAppsLayoutOperater implements LayoutOperator
 	{
 
 		private final ViewGroup parentLayout;
 		private final Map<View, Pair<Boolean, Integer>> viewInfos = new HashMap<View, Pair<Boolean, Integer>>();
 
-		MyLayoutOper(ViewGroup parent)
+		RecentAppsLayoutOperater(ViewGroup parent)
 		{
 			this.parentLayout = parent;
 		}
@@ -329,7 +329,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		vv.setLayoutTransition(layoutTransition);
 		layoutTransition.setDuration(300);
 
-		adapter = new AppsAdapter(new MyLayoutOper(vv));
+		adapter = new AppsAdapter(new RecentAppsLayoutOperater(vv));
 
 		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(new TextWatcher()
 		{
