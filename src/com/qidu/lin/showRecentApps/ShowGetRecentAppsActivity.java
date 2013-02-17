@@ -15,6 +15,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -99,19 +100,54 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		}
 
-		public void onSearch(String string)
+		class SearchAsyncTask extends AsyncTask<String, Pair<View, Boolean>, Void>
 		{
-			for (Map.Entry<View, String> xx : viewLabelMap.entrySet())
+			@Override
+			protected Void doInBackground(String... params)
 			{
-				if (match(xx.getValue(), string))
+				for (Map.Entry<View, String> xx : viewLabelMap.entrySet())
 				{
-					layoutOperator.showView(xx.getKey());
+					if (match(xx.getValue(), params[0]))
+					{
+						Pair<View, Boolean> pair = new Pair<View, Boolean>(xx.getKey(), true);
+						this.publishProgress(pair);
+					}
+					else
+					{
+						this.publishProgress(new Pair<View, Boolean>(xx.getKey(), false));
+					}
 				}
-				else
+				return null;
+			}
+
+			@Override
+			protected void onProgressUpdate(Pair<View, Boolean>... values)
+			{
+				for (Pair<View, Boolean> each : values)
 				{
-					layoutOperator.hideView(xx.getKey());
+					if (each.second)
+					{
+						layoutOperator.showView(each.first);
+					}
+					else
+					{
+						layoutOperator.hideView(each.first);
+					}
 				}
 			}
+		}
+
+		SearchAsyncTask searchAsyncTask = null;
+
+		public void onSearch(final String string)
+		{
+			if (searchAsyncTask != null)
+			{
+				searchAsyncTask.cancel(true);
+			}
+
+			searchAsyncTask = new SearchAsyncTask();
+			searchAsyncTask.execute(string);
 		}
 
 		private boolean match(String packageName, String string)
