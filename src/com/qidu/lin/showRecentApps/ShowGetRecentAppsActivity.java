@@ -14,7 +14,6 @@ import net.sourceforge.pinyin4j.format.HanyuPinyinToneType;
 import net.sourceforge.pinyin4j.format.HanyuPinyinVCharType;
 import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombination;
 import android.animation.LayoutTransition;
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
@@ -34,8 +33,6 @@ import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.gridlayout.GridLayout;
 
 public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
 {
@@ -329,7 +326,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		setContentView(R.layout.activity_test_get_recent_apps);
 
-		final GridLayout vv = (GridLayout) findViewById(R.id.gridView1);
+		final ViewGroup vv = (ViewGroup) findViewById(R.id.gridView1);
 		LayoutTransition layoutTransition = new LayoutTransition();
 		vv.setLayoutTransition(layoutTransition);
 		layoutTransition.setDuration(300);
