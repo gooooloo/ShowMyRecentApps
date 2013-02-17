@@ -66,8 +66,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				}
 			});
 
-			viewLabelMap.put(view, label.toString());
-
 			return view;
 		}
 
@@ -78,7 +76,10 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				@Override
 				protected void onProgressUpdate(View... values)
 				{
-					layoutOperator.initAndShowView(values[0]);
+					for (View view : values)
+					{
+						layoutOperator.initAndShowView(view);
+					}
 				}
 
 				@Override
@@ -86,7 +87,10 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				{
 					for (int i = 0; i < result.size(); i++)
 					{
-						this.publishProgress(getView(result.get(i)));
+						AppInfoItem xxx = result.get(i);
+						View view = getView(xxx);
+						viewLabelMap.put(view, xxx.getLabel(getPackageManager()).toString());
+						this.publishProgress(view);
 					}
 
 					for (int i = 0; i < result.size(); i++)
@@ -102,9 +106,11 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		class SearchAsyncTask extends AsyncTask<String, Pair<View, Boolean>, Void>
 		{
+			@SuppressWarnings("unchecked")
 			@Override
 			protected Void doInBackground(String... params)
 			{
+				// we only search for the first string
 				for (Map.Entry<View, String> xx : viewLabelMap.entrySet())
 				{
 					if (match(xx.getValue(), params[0]))
@@ -135,6 +141,28 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					}
 				}
 			}
+
+			private boolean match(String packageName, String string)
+			{
+				if (doSimpleMatch(packageName, string))
+				{
+					return true;
+				}
+
+				for (String xx : PinYinBridge.getHanyuPinyin(packageName))
+				{
+					if (doSimpleMatch(xx, string))
+					{
+						return true;
+					}
+				}
+				return false;
+			}
+
+			private boolean doSimpleMatch(String packageName, String string)
+			{
+				return packageName.toLowerCase().contains(string.toLowerCase());
+			}
 		}
 
 		SearchAsyncTask searchAsyncTask = null;
@@ -148,28 +176,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 			searchAsyncTask = new SearchAsyncTask();
 			searchAsyncTask.execute(string);
-		}
-
-		private boolean match(String packageName, String string)
-		{
-			if (doSimpleMatch(packageName, string))
-			{
-				return true;
-			}
-
-			for (String xx : PinYinBridge.getHanyuPinyin(packageName))
-			{
-				if (doSimpleMatch(xx, string))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private boolean doSimpleMatch(String packageName, String string)
-		{
-			return packageName.toLowerCase().contains(string.toLowerCase());
 		}
 	}
 
