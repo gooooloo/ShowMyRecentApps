@@ -52,7 +52,7 @@ class AppInfoManager
 
 	public void refreshAsynchronized()
 	{
-		new AsyncTask<Void, Void, AppInfoList>()
+		new AsyncTask<Void, AppInfoList, Void>()
 		{
 			List<RecentTaskInfo> recentTaskInfo;
 
@@ -64,7 +64,7 @@ class AppInfoManager
 			}
 
 			@Override
-			protected AppInfoList doInBackground(Void... arg0)
+			protected Void doInBackground(Void... arg0)
 			{
 				AppStatisticsManager spMgr = AppStatisticsManager.getInstance(activity);
 
@@ -109,6 +109,20 @@ class AppInfoManager
 					aaa.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
 				}
 
+				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
+				{
+
+					@Override
+					public int compare(AppInfoItem lhs, AppInfoItem rhs)
+					{
+						return rhs.getCount() - lhs.getCount();
+					}
+				};
+				Collections.sort(aaa, comparator);
+				publishProgress(aaa);
+
+				// getInstalledPackages takes time.
+				AppInfoList bbb = new AppInfoList();
 				for (PackageInfo xx : activity.getPackageManager().getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
@@ -123,30 +137,23 @@ class AppInfoManager
 						continue;
 					}
 
-
-					aaa.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
+					bbb.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
 
 				}
 
-				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
-				{
-
-					@Override
-					public int compare(AppInfoItem lhs, AppInfoItem rhs)
-					{
-						return rhs.getCount() - lhs.getCount();
-					}
-				};
-				Collections.sort(aaa, comparator);
-				return aaa;
+				publishProgress(bbb);
+				return null;
 			}
 
 			@Override
-			protected void onPostExecute(AppInfoList result)
+			protected void onProgressUpdate(AppInfoList... values)
 			{
-				for (AppInfoRefreshListener each : listeners)
+				for (AppInfoList result : values)
 				{
-					each.onAppInfoRefreshed(result);
+					for (AppInfoRefreshListener each : listeners)
+					{
+						each.onAppInfoRefreshed(result);
+					}
 				}
 			}
 
