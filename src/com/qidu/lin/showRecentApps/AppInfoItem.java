@@ -63,4 +63,9 @@ class AppInfoItem
 	{
 		return launchIntent;
 	}
+	
+	public boolean equalsPackagename(String pn)
+	{
+		return packageName.equalsIgnoreCase(pn);
+	}
 }

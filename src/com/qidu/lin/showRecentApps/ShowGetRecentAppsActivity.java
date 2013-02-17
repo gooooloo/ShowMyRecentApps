@@ -70,28 +70,33 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			return view;
 		}
 
-		public void refreshWithData(AppInfoList result)
+		public void refreshWithData(final AppInfoList result)
 		{
-			for (int i = 0; i < result.size(); i++)
+			new AsyncTask<Void, View, Void>()
 			{
-				final AppInfoItem yyy = result.get(i);
-				new AsyncTask<Void, Void, View>()
+				@Override
+				protected void onProgressUpdate(View... values)
 				{
+					layoutOperator.initAndShowView(values[0]);
+				}
 
-					@Override
-					protected void onPostExecute(View result)
+				@Override
+				protected Void doInBackground(Void... params)
+				{
+					for (int i = 0; i < result.size(); i++)
 					{
-						layoutOperator.initAndShowView(result);
+						this.publishProgress(getView(result.get(i)));
 					}
 
-					@Override
-					protected View doInBackground(Void... params)
+					for (int i = 0; i < result.size(); i++)
 					{
-						PinYinBridge.getHanyuPinyin(yyy.getLabel(getPackageManager()).toString());
-						return getView(yyy);
+						PinYinBridge.getHanyuPinyin(result.get(i).getLabel(getPackageManager()).toString());
 					}
-				}.execute();
-			}
+
+					return null;
+				}
+			}.execute();
+
 		}
 
 		public void onSearch(String string)

@@ -13,6 +13,7 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ActivityManager.RecentTaskInfo;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
 import android.os.AsyncTask;
 
 class AppInfoManager
@@ -108,6 +109,25 @@ class AppInfoManager
 					aaa.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
 				}
 
+				for (PackageInfo xx : activity.getPackageManager().getInstalledPackages(0))
+				{
+					String packageName = xx.packageName;
+					if (aaa.containsThisPackage(packageName))
+					{
+						continue;
+					}
+					Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+
+					if (launchIntent == null)
+					{
+						continue;
+					}
+
+
+					aaa.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
+
+				}
+
 				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
 				{
 
@@ -118,7 +138,6 @@ class AppInfoManager
 					}
 				};
 				Collections.sort(aaa, comparator);
-
 				return aaa;
 			}
 
