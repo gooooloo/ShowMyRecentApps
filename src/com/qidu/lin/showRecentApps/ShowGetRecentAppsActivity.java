@@ -38,7 +38,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 {
 	interface LayoutOperator
 	{
-		void initView(View view);
+		void initAndShowView(View view);
 
 		void showView(View view);
 
@@ -102,10 +102,12 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		}
 
 		@Override
-		public void initView(View view)
+		public void initAndShowView(View view)
 		{
 			Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, viewInfos.size());
 			viewInfos.put(view, pair);
+			
+			showView(view);
 		}
 
 	}
@@ -177,17 +179,13 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					@Override
 					protected void onPostExecute(View result)
 					{
-						layoutOperator.showView(result);
+						layoutOperator.initAndShowView(result);
 					}
 
 					@Override
 					protected View doInBackground(Void... params)
 					{
-						View v = getView(yyy);
-
-						// TODO: consider thread problem.
-						layoutOperator.initView(v);
-						return v;
+						return getView(yyy);
 					}
 				}.execute();
 			}
