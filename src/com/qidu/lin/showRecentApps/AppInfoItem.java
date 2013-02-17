@@ -10,11 +10,16 @@ class AppInfoItem
 	final Intent launchIntent;
 	final String packageName;
 
-	public AppInfoItem(String packageName, int cnt, Intent launchIntent)
+	private AppInfoItem(String packageName, int cnt, Intent launchIntent)
 	{
 		this.packageName = packageName;
 		this.cnt = cnt;
 		this.launchIntent = launchIntent;
+	}
+	
+	public static AppInfoItem makeInstance(String packageName, int cnt, Intent launchIntent)
+	{
+		return new AppInfoItem(packageName, cnt, launchIntent);
 	}
 
 }

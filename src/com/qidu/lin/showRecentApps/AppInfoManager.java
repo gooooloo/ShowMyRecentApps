@@ -105,7 +105,7 @@ class AppInfoManager
 
 					Integer count = (Integer) eachEntry.getValue();
 
-					aaa.add(new AppInfoItem(packageName, count, launchIntent));
+					aaa.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
 				}
 
 				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
