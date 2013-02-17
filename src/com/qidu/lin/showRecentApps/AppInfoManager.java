@@ -114,7 +114,7 @@ class AppInfoManager
 					@Override
 					public int compare(AppInfoItem lhs, AppInfoItem rhs)
 					{
-						return rhs.cnt - lhs.cnt;
+						return rhs.getCount() - lhs.getCount();
 					}
 				};
 				Collections.sort(aaa, comparator);

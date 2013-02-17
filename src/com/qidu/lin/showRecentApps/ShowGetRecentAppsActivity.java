@@ -9,8 +9,6 @@ import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -63,7 +61,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				@Override
 				public void onClick(View arg0)
 				{
-					finishWithIntent(xxx.launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+					finishWithIntent(xxx.getLaunchIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 				}
 			});
 

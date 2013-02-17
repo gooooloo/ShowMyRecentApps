@@ -10,9 +10,9 @@ import android.graphics.drawable.Drawable;
 
 class AppInfoItem
 {
-	final int cnt;
-	final Intent launchIntent;
-	final String packageName;
+	final private int cnt;
+	final private Intent launchIntent;
+	final private String packageName;
 
 	private AppInfoItem(String packageName, int cnt, Intent launchIntent)
 	{
@@ -57,5 +57,10 @@ class AppInfoItem
 	public int getCount()
 	{
 		return cnt;
+	}
+	
+	public Intent getLaunchIntent()
+	{
+		return launchIntent;
 	}
 }
