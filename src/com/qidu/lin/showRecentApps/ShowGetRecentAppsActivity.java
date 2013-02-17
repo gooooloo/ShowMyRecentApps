@@ -71,7 +71,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		public void refreshWithData(AppInfoList result)
 		{
-
 			for (int i = 0; i < result.size(); i++)
 			{
 				final AppInfoItem yyy = result.get(i);
@@ -151,7 +150,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		adapter.refreshWithData(result);
 	}
 
-	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -162,9 +160,11 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		setContentView(R.layout.activity_test_get_recent_apps);
 
 		final ViewGroup vv = (ViewGroup) findViewById(R.id.gridView1);
-		LayoutTransition layoutTransition = new LayoutTransition();
-		vv.setLayoutTransition(layoutTransition);
-		layoutTransition.setDuration(300);
+
+		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
+		{
+			setLayoutAnimationForHoneycomb(vv);
+		}
 
 		adapter = new RecentAppsAdapter(new RecentAppsLayoutOperater(vv));
 
@@ -192,6 +192,14 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		AppInfoManager.getInstance(this).addListener(this);
 		AppInfoManager.getInstance(this).refreshAsynchronized();
+	}
+
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
+	public void setLayoutAnimationForHoneycomb(final ViewGroup vv)
+	{
+		LayoutTransition layoutTransition = new LayoutTransition();
+		vv.setLayoutTransition(layoutTransition);
+		layoutTransition.setDuration(300);
 	}
 
 	@Override
