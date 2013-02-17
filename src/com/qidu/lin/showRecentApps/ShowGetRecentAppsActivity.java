@@ -38,20 +38,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			this.layoutOperator = lo;
 		}
 
-		private CharSequence getLabel(AppInfoItem xxx)
-		{
-			ApplicationInfo applicationInfo = null;
-			try
-			{
-				applicationInfo = getPackageManager().getApplicationInfo(xxx.packageName, 0);
-			}
-			catch (NameNotFoundException e)
-			{
-				e.printStackTrace();
-			}
-			return getPackageManager().getApplicationLabel(applicationInfo);
-		}
-
 		private Drawable getIcon(AppInfoItem xxx)
 		{
 			ApplicationInfo applicationInfo = null;
@@ -70,7 +56,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		{
 			View view = getLayoutInflater().inflate(R.layout.entry, null);
 
-			CharSequence label = getLabel(xxx);
+			CharSequence label = xxx.getLabel(getPackageManager());
 			Drawable icon = getIcon(xxx);
 
 			if (icon != null)
