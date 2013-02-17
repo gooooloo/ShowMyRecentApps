@@ -35,13 +35,13 @@ import android.widget.TextView;
 
 public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
 {
-	public class AppsAdapter
+	public class RecentAppsAdapter
 	{
 		private final Map<View, String> viewLabelMap = new HashMap<View, String>();
 
 		final LayoutOperator layoutOperator;
 
-		public AppsAdapter(LayoutOperator lo)
+		public RecentAppsAdapter(LayoutOperator lo)
 		{
 			this.layoutOperator = lo;
 		}
@@ -217,7 +217,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		}
 	}
 
-	private AppsAdapter adapter = null;
+	private RecentAppsAdapter adapter = null;
 
 	private void finishWithIntent(Intent intent)
 	{
@@ -252,7 +252,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		vv.setLayoutTransition(layoutTransition);
 		layoutTransition.setDuration(300);
 
-		adapter = new AppsAdapter(new RecentAppsLayoutOperater(vv));
+		adapter = new RecentAppsAdapter(new RecentAppsLayoutOperater(vv));
 
 		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(new TextWatcher()
 		{
