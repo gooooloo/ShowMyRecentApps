@@ -55,7 +55,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				((TextView) view.findViewById(R.id.editText1)).setText(label);
 			}
 
-			((TextView) view.findViewById(R.id.editText2)).setText("" + xxx.cnt);
+			((TextView) view.findViewById(R.id.editText2)).setText("" + xxx.getCount());
 
 			view.setOnClickListener(new OnClickListener()
 			{

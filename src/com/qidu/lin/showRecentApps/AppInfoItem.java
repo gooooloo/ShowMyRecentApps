@@ -54,4 +54,8 @@ class AppInfoItem
 		return pm.getApplicationIcon(applicationInfo);
 	}
 
+	public int getCount()
+	{
+		return cnt;
+	}
 }
