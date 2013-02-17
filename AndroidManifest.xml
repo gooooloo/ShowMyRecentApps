@@ -16,7 +16,8 @@
         <activity
             android:name="com.qidu.lin.showRecentApps.ShowGetRecentAppsActivity"
             android:label="@string/title_activity_test_get_recent_apps"
-            android:theme="@style/mydialogactivity" >
+            android:theme="@style/mydialogactivity"
+            android:windowSoftInputMode="stateAlwaysHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -25,12 +26,11 @@
         </activity>
         <activity
             android:name="com.qidu.lin.showRecentApps.EMPTYActivity"
-            android:theme="@style/MyTransparent"
             android:label="@string/title_activity_empty"
             android:launchMode="singleInstance"
-            android:taskAffinity="a.b.c.d.e.f.f.e.a" >
+            android:taskAffinity="a.b.c.d.e.f.f.e.a"
+            android:theme="@style/MyTransparent" >
         </activity>
     </application>
 
-</manifest>
-<!--             android:excludeFromRecents="true" -->
+</manifest><!-- android:excludeFromRecents="true" -->
