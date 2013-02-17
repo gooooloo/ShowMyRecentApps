@@ -40,7 +40,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		{
 			View view = getLayoutInflater().inflate(R.layout.entry, null);
 
-			CharSequence label = xxx.getLabel(getPackageManager());
+			final CharSequence label = xxx.getLabel(getPackageManager());
 			Drawable icon = xxx.getIcon(getPackageManager());
 
 			if (icon != null)
@@ -66,6 +66,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			});
 
 			viewLabelMap.put(view, label.toString());
+
 			return view;
 		}
 
@@ -86,6 +87,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 					@Override
 					protected View doInBackground(Void... params)
 					{
+						PinYinBridge.getHanyuPinyin(yyy.getLabel(getPackageManager()).toString());
 						return getView(yyy);
 					}
 				}.execute();

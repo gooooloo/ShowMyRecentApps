@@ -2,7 +2,9 @@
 
 package com.qidu.lin.showRecentApps;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import net.sourceforge.pinyin4j.PinyinHelper;
@@ -15,16 +17,35 @@ import net.sourceforge.pinyin4j.format.exception.BadHanyuPinyinOutputFormatCombi
 public class PinYinBridge
 {
 
+	private static Map<String, Set<String>> translateTable = new HashMap<String, Set<String>>();
+	private static Object mutex = new Object();
+
 	public static Set<String> getHanyuPinyin(String name)
 	{
+		synchronized (mutex)
+		{
+			if (translateTable.containsKey(name))
+			{
+				return translateTable.get(name);
+			}
+		}
+
 		Set<String> hanyu = new HashSet<String>();
 		for (int i = 0; i < name.length(); i++)
 		{
 			hanyu = Utils.product(hanyu, PinYinBridge.translate(name.charAt(i)));
 		}
+
+		synchronized (mutex)
+		{
+			if (!translateTable.containsKey(name))
+			{
+				translateTable.put(name, hanyu);
+			}
+		}
 		return hanyu;
 	}
-	
+
 	private static Set<String> translate(char ch)
 	{
 		HanyuPinyinOutputFormat outputFormat = new HanyuPinyinOutputFormat();
