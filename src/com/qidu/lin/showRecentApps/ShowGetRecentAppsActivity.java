@@ -210,11 +210,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		final ViewGroup vv = (ViewGroup) findViewById(R.id.gridView1);
 
-		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
-		{
-			setLayoutAnimationForHoneycomb(vv);
-		}
-
 		adapter = new RecentAppsAdapter(new RecentAppsLayoutOperater(vv));
 
 		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(new TextWatcher()
@@ -235,6 +230,12 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			@Override
 			public void afterTextChanged(Editable s)
 			{
+
+				if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
+				{
+					setLayoutAnimationForHoneycomb(vv);
+				}
+				
 				adapter.onSearch(s.toString());
 			}
 		});
@@ -246,9 +247,12 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	public void setLayoutAnimationForHoneycomb(final ViewGroup vv)
 	{
-		LayoutTransition layoutTransition = new LayoutTransition();
-		vv.setLayoutTransition(layoutTransition);
-		layoutTransition.setDuration(300);
+		if (vv.getLayoutTransition() == null)
+		{
+			LayoutTransition layoutTransition = new LayoutTransition();
+			vv.setLayoutTransition(layoutTransition);
+			layoutTransition.setDuration(300);
+		}
 	}
 
 	@Override
