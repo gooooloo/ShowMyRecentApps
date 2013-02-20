@@ -18,7 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/dummy"
-        android:hint="type to search app" >
+        android:hint="type to search app"
+        android:inputType="textVisiblePassword" >
     </EditText>
 
     <ScrollView
