@@ -8,6 +8,7 @@ import java.util.Map;
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -16,10 +17,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -235,7 +238,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 				{
 					setLayoutAnimationForHoneycomb(vv);
 				}
-				
+
 				adapter.onSearch(s.toString());
 			}
 		});
@@ -253,6 +256,25 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			vv.setLayoutTransition(layoutTransition);
 			layoutTransition.setDuration(300);
 		}
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event)
+	{
+		if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)
+		{
+			showKeyboard();
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	private void showKeyboard()
+	{
+		EditText editText = (EditText) findViewById(R.id.searchView1);
+		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		// only will trigger it if no physical keyboard is open
+		mgr.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 	@Override
