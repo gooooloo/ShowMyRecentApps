@@ -2,7 +2,7 @@
 
     <style name="AppTheme" parent="android:Theme.Holo" />
 
-    <style name="mydialogactivity" parent="android:Theme.Holo.Light.Dialog"></style>
+    <style name="mydialogactivity" parent="android:Theme.Holo.Dialog"></style>
 
     <style name="MyTransparent">
         <item name="android:windowBackground">@android:color/transparent</item>
