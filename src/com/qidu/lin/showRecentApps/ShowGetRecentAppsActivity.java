@@ -18,6 +18,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Pair;
 import android.view.KeyEvent;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -245,6 +246,48 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 		AppInfoManager.getInstance(this).addListener(this);
 		AppInfoManager.getInstance(this).refreshAsynchronized();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.app.Activity#onTouchEvent(android.view.MotionEvent)
+	 */
+	@Override
+	public boolean onTouchEvent(MotionEvent event)
+	{
+		if (isEventPositionInsideRootLayout(event))
+		{
+			return super.onTouchEvent(event);
+		}
+		else
+		{
+			showKeyboard();
+			return true;
+		}
+	}
+
+	private boolean isEventPositionInsideRootLayout(MotionEvent event)
+	{
+		boolean isEventPositionInsideLayout = false;
+
+		int[] location = new int[2];
+		View vv = findViewById(R.id.root);
+		vv.getLocationOnScreen(location);
+
+		float x = event.getX();
+		float y = event.getY();
+
+		int width = vv.getWidth();
+		int height = vv.getHeight();
+		if (0 <= x && x <= width)
+		{
+			if (0 <= y && y <= height)
+			{
+				isEventPositionInsideLayout = true;
+			}
+		}
+		return isEventPositionInsideLayout;
 	}
 
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
