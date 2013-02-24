@@ -30,6 +30,34 @@ import android.widget.TextView;
 
 public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
 {
+	private static final float esp = 100;
+	private Float lastY;
+
+	@Override
+	public boolean dispatchTouchEvent(MotionEvent ev)
+	{
+		if (ev.getAction() == MotionEvent.ACTION_DOWN)
+		{
+			if (findViewById(R.id.scrollView1).getScrollY() == 0)
+			{
+				lastY = ev.getRawY();
+			}
+		}
+		if (ev.getAction() == MotionEvent.ACTION_UP)
+		{
+			if (lastY != null)
+			{
+				if (ev.getRawY() > lastY + esp)
+				{
+					showKeyboard();
+				}
+
+				lastY = null;
+			}
+		}
+		return super.dispatchTouchEvent(ev);
+	}
+
 	public class RecentAppsAdapter
 	{
 		private final Map<View, String> viewLabelMap = new HashMap<View, String>();
