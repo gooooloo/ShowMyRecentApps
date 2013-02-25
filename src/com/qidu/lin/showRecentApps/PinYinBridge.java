@@ -70,9 +70,6 @@ public class PinYinBridge
 			for (String pinyin : pinyinStrings)
 			{
 				ret.add(pinyin);
-
-				// we also support the first charactor search for Pinyin
-				ret.add(pinyin.substring(0, 1));
 			}
 		}
 		return ret;
