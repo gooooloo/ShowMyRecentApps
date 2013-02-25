@@ -217,7 +217,26 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 			private boolean doSimpleMatch(String packageName, String string)
 			{
-				return packageName.toLowerCase().contains(string.toLowerCase());
+				char[] aaa = packageName.toLowerCase().toCharArray();
+				char[] bbb = string.toLowerCase().toCharArray();
+
+				int iaaa = 0;
+				int ibbb = 0;
+
+				while (iaaa < aaa.length && ibbb < bbb.length)
+				{
+					if (aaa[iaaa] == bbb[ibbb])
+					{
+						iaaa++;
+						ibbb++;
+					}
+					else
+					{
+						iaaa++;
+					}
+				}
+
+				return ibbb == bbb.length;
 			}
 		}
 
