@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/imageView1"
+        android:src="@android:drawable/stat_notify_sync"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"

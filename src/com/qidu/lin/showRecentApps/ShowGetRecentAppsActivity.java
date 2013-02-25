@@ -60,6 +60,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 
 	public class RecentAppsAdapter
 	{
+
 		private final Map<View, String> viewLabelMap = new HashMap<View, String>();
 
 		final LayoutOperator layoutOperator;
@@ -69,60 +70,83 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			this.layoutOperator = lo;
 		}
 
-		public View getView(final AppInfoItem xxx)
+		public void reserveViews(int count)
 		{
-			View view = getLayoutInflater().inflate(R.layout.entry, null);
-
-			final CharSequence label = xxx.getLabel(getPackageManager());
-			Drawable icon = xxx.getIcon(getPackageManager());
-
-			if (icon != null)
+			for (int i = 0; i < count; i++)
 			{
-				((ImageView) view.findViewById(R.id.imageView1)).setImageDrawable(icon);
+				layoutOperator.initView(getLayoutInflater().inflate(R.layout.entry, null));
 			}
-
-			if (label != null)
-			{
-				((TextView) view.findViewById(R.id.editText1)).setText(label);
-			}
-
-			((TextView) view.findViewById(R.id.editText2)).setText("" + xxx.getCount());
-
-			view.setOnClickListener(new OnClickListener()
-			{
-
-				@Override
-				public void onClick(View arg0)
-				{
-					finishWithIntent(xxx.getLaunchIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-				}
-			});
-
-			return view;
 		}
 
 		public void refreshWithData(final AppInfoList result)
 		{
-			new AsyncTask<Void, View, Void>()
+			final int typeSetText = 0;
+			final int typeSetImage = 1;
+			final int typeShowView = 2;
+			new AsyncTask<Void, Object, Void>()
 			{
+
 				@Override
-				protected void onProgressUpdate(View... values)
+				protected void onProgressUpdate(Object... values)
 				{
-					for (View view : values)
+					switch ((Integer) values[0])
 					{
-						layoutOperator.initAndShowView(view);
+					case typeSetText:
+						((TextView) values[1]).setText((CharSequence) values[2]);
+						break;
+					case typeSetImage:
+						((ImageView) values[1]).setImageDrawable((Drawable) values[2]);
+						break;
+					case typeShowView:
+						layoutOperator.showView((View) values[1]);
+						break;
+					default:
 					}
+				}
+
+				@Override
+				protected void onPreExecute()
+				{
+					reserveViews(result.size());
 				}
 
 				@Override
 				protected Void doInBackground(Void... params)
 				{
+
 					for (int i = 0; i < result.size(); i++)
 					{
-						AppInfoItem xxx = result.get(i);
-						View view = getView(xxx);
+						final AppInfoItem xxx = result.get(i);
+						final View view = layoutOperator.getViewByIndex(viewLabelMap.size());
+						final CharSequence label = xxx.getLabel(getPackageManager());
+						final Drawable icon = xxx.getIcon(getPackageManager());
+
+						if (icon != null)
+						{
+							publishProgress(typeSetImage, (ImageView) view.findViewById(R.id.imageView1), icon);
+						}
+
+						if (label != null)
+						{
+							publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText1), label);
+						}
+
+						{
+							publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText2), "" + xxx.getCount());
+						}
+
+						view.setOnClickListener(new OnClickListener()
+						{
+
+							@Override
+							public void onClick(View arg0)
+							{
+								finishWithIntent(xxx.getLaunchIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+							}
+						});
 						viewLabelMap.put(view, xxx.getLabel(getPackageManager()).toString());
-						this.publishProgress(view);
+
+						publishProgress(typeShowView, view);
 					}
 
 					for (int i = 0; i < result.size(); i++)

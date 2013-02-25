@@ -66,13 +66,24 @@ class RecentAppsLayoutOperater implements LayoutOperator
 	}
 
 	@Override
-	public void initAndShowView(View view)
+	public void initView(View view)
 	{
-		
+
 		Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, viewInfos.size());
 		viewInfos.put(view, pair);
-		
+
 		showView(view);
+	}
+
+	@Override
+	public View getViewByIndex(int index)
+	{
+		if (index < 0 || index >= viewInfos.size())
+		{
+			return null;
+		}
+		
+		return parentLayout.getChildAt(index);
 	}
 
 }
