@@ -12,7 +12,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class ShowGetRecentAppsActivity extends Activity
 			{
 				if (ev.getRawY() > lastY + esp)
 				{
-					showKeyboard();
+					toggleKeyboard();
 				}
 
 				lastY = null;
@@ -158,23 +157,18 @@ public class ShowGetRecentAppsActivity extends Activity
 		}
 	}
 
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event)
-	{
-		if (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN || keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-		{
-			showKeyboard();
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
 	private void showKeyboard()
 	{
 		EditText editText = (EditText) findViewById(R.id.searchView1);
 		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		// only will trigger it if no physical keyboard is open
 		mgr.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
+	}
+	
+	private void toggleKeyboard()
+	{
+		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+		mgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.SHOW_IMPLICIT);
 	}
 
 	@Override
