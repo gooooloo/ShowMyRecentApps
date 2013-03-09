@@ -11,6 +11,7 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultListener
 {
@@ -170,8 +171,10 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		Intent intentToManageApp = xxx.getIntentToManageApp();
 		if (intentToManageApp != null)
 		{
+			Toast.makeText(showGetRecentAppsActivity, R.string.tip_show_app_management, Toast.LENGTH_SHORT).show();
 			showGetRecentAppsActivity.startActivity(intentToManageApp);
 			showGetRecentAppsActivity.finish();
 		}
+		
 	}
 }
