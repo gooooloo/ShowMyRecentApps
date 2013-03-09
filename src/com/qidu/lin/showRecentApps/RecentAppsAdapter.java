@@ -42,14 +42,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		this.layoutOperator = lo;
 	}
 
-	public void reserveViews(int count)
-	{
-		for (int i = 0; i < count; i++)
-		{
-			layoutOperator.initView(this.showGetRecentAppsActivity.getLayoutInflater().inflate(R.layout.entry, null));
-		}
-	}
-
 	public void refreshWithData(final AppInfoList result)
 	{
 		final int typeSetText = 0;
@@ -79,7 +71,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			@Override
 			protected void onPreExecute()
 			{
-				reserveViews(result.size());
+				layoutOperator.reserveViews(showGetRecentAppsActivity.getLayoutInflater(), result.size());
 			}
 
 			@Override
@@ -130,7 +122,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 					});
 
-					labelViewMap.put(xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString(), view);
+					labelViewMap.put(label.toString(), view);
 
 					publishProgress(typeShowView, view);
 				}
@@ -175,6 +167,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			showGetRecentAppsActivity.startActivity(intentToManageApp);
 			showGetRecentAppsActivity.finish();
 		}
-		
+
 	}
 }

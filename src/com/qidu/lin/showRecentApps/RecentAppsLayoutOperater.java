@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import android.util.Pair;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -66,13 +67,15 @@ class RecentAppsLayoutOperater implements LayoutOperator
 	}
 
 	@Override
-	public void initView(View view)
+	public void reserveViews(LayoutInflater fi, int count)
 	{
+		for (int i = 0; i < count; i++)
+		{
+			View view = fi.inflate(R.layout.entry, null);
+			viewInfos.put(view, new Pair<Boolean, Integer>(true, viewInfos.size()));
 
-		Pair<Boolean, Integer> pair = new Pair<Boolean, Integer>(false, viewInfos.size());
-		viewInfos.put(view, pair);
-
-		showView(view);
+			parentLayout.addView(view);
+		}
 	}
 
 	@Override
@@ -82,7 +85,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		{
 			return null;
 		}
-		
+
 		return parentLayout.getChildAt(index);
 	}
 
