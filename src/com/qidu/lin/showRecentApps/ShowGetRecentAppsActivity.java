@@ -101,6 +101,7 @@ public class ShowGetRecentAppsActivity extends Activity
 		});
 
 		AppInfoManager.getInstance(this).addListener(adapter);
+		SearchManager.getInstance().setSearchResultListener(adapter);
 		AppInfoManager.getInstance(this).refreshAsynchronized();
 	}
 
@@ -179,6 +180,7 @@ public class ShowGetRecentAppsActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
+		SearchManager.getInstance().setSearchResultListener(null);
 		AppInfoManager.getInstance(this).deleteListener(adapter);
 		super.onDestroy();
 	}

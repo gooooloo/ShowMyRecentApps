@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class RecentAppsAdapter implements AppInfoRefreshListener
+public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultListener
 {
 
 	@Override
