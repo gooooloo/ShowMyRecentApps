@@ -101,6 +101,8 @@ public class ShowGetRecentAppsActivity extends Activity
 				SearchManager.getInstance().onSearch(s.toString());
 			}
 		});
+		
+		PackageManagerCache.setPm(getPackageManager());
 
 		AppInfoManager.getInstance().addListener(adapter);
 		SearchManager.getInstance().setSearchResultListener(adapter);

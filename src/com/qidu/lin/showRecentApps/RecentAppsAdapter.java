@@ -32,7 +32,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	 */
 	private final ShowGetRecentAppsActivity showGetRecentAppsActivity;
 
-	private final Map<String, View> labelViewMap = new HashMap<String, View>();
+	private final Map<String, View> appinfoidViewMap = new HashMap<String, View>();
 
 	final LayoutOperator layoutOperator;
 
@@ -81,7 +81,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				for (int i = 0; i < result.size(); i++)
 				{
 					final AppInfoItem xxx = result.get(i);
-					final View view = layoutOperator.getViewByIndex(labelViewMap.size());
+					final View view = layoutOperator.getViewByIndex(appinfoidViewMap.size());
 					final CharSequence label = xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
 					final Drawable icon = xxx.getIcon(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
 
@@ -122,7 +122,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 					});
 
-					labelViewMap.put(label.toString(), view);
+					appinfoidViewMap.put(xxx.getId(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()), view);
 
 					publishProgress(typeShowView, view);
 				}
@@ -140,9 +140,9 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	}
 
 	@Override
-	public void onSearchResult(String packageName, Boolean matched)
+	public void onSearchResult(AppInfoItem appInfoItem, Boolean matched)
 	{
-		View view = labelViewMap.get(packageName);
+		View view = appinfoidViewMap.get(appInfoItem.getId(PackageManagerCache.getPm()));
 		if (view == null)
 		{
 			return;

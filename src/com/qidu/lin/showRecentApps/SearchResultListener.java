@@ -3,6 +3,6 @@ package com.qidu.lin.showRecentApps;
 public interface SearchResultListener
 {
 
-	void onSearchResult(String packageName, Boolean matched);
+	void onSearchResult(AppInfoItem appInfoItem, Boolean matched);
 
 }

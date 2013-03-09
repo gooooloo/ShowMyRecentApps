@@ -21,17 +21,17 @@ class AppInfoManager
 {
 	private static AppInfoManager instance;
 
-	private ArrayList<CharSequence> packageLabels = new ArrayList<CharSequence>();
+	private AppInfoList packageLabels = new AppInfoList();
 
-	private void addPackageLabel(CharSequence charSequence)
+	private void addPackageLabel(AppInfoItem appInfo)
 	{
 		synchronized (packageLabels)
 		{
-			packageLabels.add(charSequence);
+			packageLabels.add(appInfo);
 		}
 	}
 
-	public List<CharSequence> getLabels()
+	public AppInfoList getAppInfoList()
 	{
 		synchronized (packageLabels)
 		{
@@ -133,7 +133,7 @@ class AppInfoManager
 
 				for (AppInfoItem each : statedAppInfoList)
 				{
-					addPackageLabel(each.getLabel(activity.getPackageManager()));
+					addPackageLabel(each);
 				}
 
 				publishProgress(statedAppInfoList);
@@ -160,7 +160,7 @@ class AppInfoManager
 
 				for (AppInfoItem each : installedAppInfoList)
 				{
-					addPackageLabel(each.getLabel(activity.getPackageManager()));
+					addPackageLabel(each);
 				}
 
 				publishProgress(installedAppInfoList);

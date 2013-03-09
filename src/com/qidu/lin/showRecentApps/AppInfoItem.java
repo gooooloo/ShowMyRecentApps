@@ -27,6 +27,11 @@ class AppInfoItem
 		return new AppInfoItem(packageName, cnt, launchIntent);
 	}
 
+	public String getId(PackageManager pm)
+	{
+		return "" + packageName + getLabel(pm);
+	}
+
 	public CharSequence getLabel(PackageManager pm)
 	{
 		ApplicationInfo applicationInfo = null;

@@ -2,6 +2,7 @@ package com.qidu.lin.showRecentApps;
 
 import java.util.Map;
 
+import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Pair;
 import android.view.View;
@@ -26,39 +27,31 @@ public class SearchManager
 		return instance;
 	}
 
-	class SearchAsyncTask extends AsyncTask<String, Pair<String, Boolean>, Void>
+	class SearchAsyncTask extends AsyncTask<String, Pair<AppInfoItem, Boolean>, Void>
 	{
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(String... params)
 		{
-			for (CharSequence label : AppInfoManager.getInstance().getLabels())
+			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
-				String labelString = label.toString();
+				String labelString = each.getLabel(PackageManagerCache.getPm()).toString();
 				boolean matched = match(labelString, params[0]);
-				this.publishProgress(new Pair<String, Boolean>(labelString, matched));
+				this.publishProgress(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
 			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(Pair<String, Boolean>... values)
+		protected void onProgressUpdate(Pair<AppInfoItem, Boolean>... values)
 		{
 			if (resultListner == null)
 			{
 				return;
 			}
-			for (Pair<String, Boolean> each : values)
+			for (Pair<AppInfoItem, Boolean> each : values)
 			{
 				resultListner.onSearchResult(each.first, each.second);
-				// if (each.second)
-				// {
-				// layoutOperator.showView(each.first);
-				// }
-				// else
-				// {
-				// layoutOperator.hideView(each.first);
-				// }
 			}
 		}
 
