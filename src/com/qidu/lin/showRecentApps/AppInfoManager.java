@@ -2,6 +2,7 @@
 
 package com.qidu.lin.showRecentApps;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -19,6 +20,24 @@ import android.os.AsyncTask;
 class AppInfoManager
 {
 	private static AppInfoManager instance;
+
+	private ArrayList<CharSequence> packageLabels = new ArrayList<CharSequence>();
+
+	private void addPackageLabel(CharSequence charSequence)
+	{
+		synchronized (packageLabels)
+		{
+			packageLabels.add(charSequence);
+		}
+	}
+
+	public List<CharSequence> getLabels()
+	{
+		synchronized (packageLabels)
+		{
+			return packageLabels;
+		}
+	}
 
 	public static AppInfoManager getInstance(Activity activity)
 	{
@@ -119,6 +138,12 @@ class AppInfoManager
 					}
 				};
 				Collections.sort(statedAppInfoList, comparator);
+
+				for (AppInfoItem each : statedAppInfoList)
+				{
+					addPackageLabel(each.getLabel(activity.getPackageManager()));
+				}
+
 				publishProgress(statedAppInfoList);
 
 				// getInstalledPackages takes time.
@@ -139,6 +164,11 @@ class AppInfoManager
 
 					installedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
 
+				}
+
+				for (AppInfoItem each : installedAppInfoList)
+				{
+					addPackageLabel(each.getLabel(activity.getPackageManager()));
 				}
 
 				publishProgress(installedAppInfoList);
