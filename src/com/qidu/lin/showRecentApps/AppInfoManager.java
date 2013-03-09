@@ -66,7 +66,7 @@ class AppInfoManager
 			@Override
 			protected Void doInBackground(Void... arg0)
 			{
-				AppStatisticsManager spMgr = AppStatisticsManager.getInstance(activity);
+				AppStatisticsManager appStatMgr = AppStatisticsManager.getInstance(activity);
 
 				for (RecentTaskInfo each : recentTaskInfo)
 				{
@@ -90,11 +90,11 @@ class AppInfoManager
 						continue;
 					}
 
-					spMgr.AddAppUsdCountByOne(packageName);
+					appStatMgr.AddAppUsdCountByOne(packageName);
 				}
 
-				AppInfoList aaa = new AppInfoList();
-				for (Map.Entry<String, Integer> eachEntry : spMgr.getAll().entrySet())
+				AppInfoList statedAppInfoList = new AppInfoList();
+				for (Map.Entry<String, Integer> eachEntry : appStatMgr.getAll().entrySet())
 				{
 					String packageName = eachEntry.getKey();
 					Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
@@ -106,7 +106,7 @@ class AppInfoManager
 
 					Integer count = (Integer) eachEntry.getValue();
 
-					aaa.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
+					statedAppInfoList.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
 				}
 
 				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
@@ -118,15 +118,15 @@ class AppInfoManager
 						return rhs.getCount() - lhs.getCount();
 					}
 				};
-				Collections.sort(aaa, comparator);
-				publishProgress(aaa);
+				Collections.sort(statedAppInfoList, comparator);
+				publishProgress(statedAppInfoList);
 
 				// getInstalledPackages takes time.
-				AppInfoList bbb = new AppInfoList();
+				AppInfoList installedAppInfoList = new AppInfoList();
 				for (PackageInfo xx : activity.getPackageManager().getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
-					if (aaa.containsThisPackage(packageName))
+					if (statedAppInfoList.containsThisPackage(packageName))
 					{
 						continue;
 					}
@@ -137,11 +137,11 @@ class AppInfoManager
 						continue;
 					}
 
-					bbb.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
+					installedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
 
 				}
 
-				publishProgress(bbb);
+				publishProgress(installedAppInfoList);
 				return null;
 			}
 
