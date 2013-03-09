@@ -6,7 +6,6 @@ import java.util.Map;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
-import android.util.Pair;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ImageView;
@@ -31,7 +30,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	 */
 	private final ShowGetRecentAppsActivity showGetRecentAppsActivity;
 
-	private final Map<View, String> viewLabelMap = new HashMap<View, String>();
+	private final Map<String, View> labelViewMap = new HashMap<String, View>();
 
 	final LayoutOperator layoutOperator;
 
@@ -88,7 +87,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				for (int i = 0; i < result.size(); i++)
 				{
 					final AppInfoItem xxx = result.get(i);
-					final View view = layoutOperator.getViewByIndex(viewLabelMap.size());
+					final View view = layoutOperator.getViewByIndex(labelViewMap.size());
 					final CharSequence label = xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
 					final Drawable icon = xxx.getIcon(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
 
@@ -112,17 +111,19 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 						@Override
 						public void onClick(View arg0)
 						{
-							RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(xxx.getLaunchIntent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+							RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(xxx.getLaunchIntent().addFlags(
+									Intent.FLAG_ACTIVITY_NEW_TASK));
 						}
 					});
-					viewLabelMap.put(view, xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString());
+					labelViewMap.put(xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString(), view);
 
 					publishProgress(typeShowView, view);
 				}
 
 				for (int i = 0; i < result.size(); i++)
 				{
-					PinYinBridge.getHanyuPinyin(result.get(i).getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString());
+					PinYinBridge.getHanyuPinyin(result.get(i)
+							.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString());
 				}
 
 				return null;
@@ -131,96 +132,23 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 	}
 
-	class SearchAsyncTask extends AsyncTask<String, Pair<View, Boolean>, Void>
+	@Override
+	public void onSearchResult(String packageName, Boolean matched)
 	{
-		@SuppressWarnings("unchecked")
-		@Override
-		protected Void doInBackground(String... params)
+		View view = labelViewMap.get(packageName);
+		if (view == null)
 		{
-			// we only search for the first string
-			for (Map.Entry<View, String> xx : viewLabelMap.entrySet())
-			{
-				if (match(xx.getValue(), params[0]))
-				{
-					Pair<View, Boolean> pair = new Pair<View, Boolean>(xx.getKey(), true);
-					this.publishProgress(pair);
-				}
-				else
-				{
-					this.publishProgress(new Pair<View, Boolean>(xx.getKey(), false));
-				}
-			}
-			return null;
+			return;
 		}
 
-		@Override
-		protected void onProgressUpdate(Pair<View, Boolean>... values)
+		if (matched)
 		{
-			for (Pair<View, Boolean> each : values)
-			{
-				if (each.second)
-				{
-					layoutOperator.showView(each.first);
-				}
-				else
-				{
-					layoutOperator.hideView(each.first);
-				}
-			}
+			layoutOperator.showView(view);
 		}
-
-		private boolean match(String packageName, String string)
+		else
 		{
-			if (doSimpleMatch(packageName, string))
-			{
-				return true;
-			}
-
-			for (String xx : PinYinBridge.getHanyuPinyin(packageName))
-			{
-				if (doSimpleMatch(xx, string))
-				{
-					return true;
-				}
-			}
-			return false;
-		}
-
-		private boolean doSimpleMatch(String packageName, String string)
-		{
-			char[] aaa = packageName.toLowerCase().toCharArray();
-			char[] bbb = string.toLowerCase().toCharArray();
-
-			int iaaa = 0;
-			int ibbb = 0;
-
-			while (iaaa < aaa.length && ibbb < bbb.length)
-			{
-				if (aaa[iaaa] == bbb[ibbb])
-				{
-					iaaa++;
-					ibbb++;
-				}
-				else
-				{
-					iaaa++;
-				}
-			}
-
-			return ibbb == bbb.length;
+			layoutOperator.hideView(view);
 		}
 	}
 
-	SearchAsyncTask searchAsyncTask = null;
-
-	public void onSearch(final String string)
-	{
-		if (searchAsyncTask != null)
-		{
-			searchAsyncTask.cancel(true);
-		}
-
-		searchAsyncTask = new SearchAsyncTask();
-		searchAsyncTask.execute(string);
-	}
 }

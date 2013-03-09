@@ -39,25 +39,17 @@ class AppInfoManager
 		}
 	}
 
-	public static AppInfoManager getInstance(Activity activity)
+	public static AppInfoManager getInstance()
 	{
 		if (instance == null)
 		{
-			instance = new AppInfoManager(activity);
+			instance = new AppInfoManager();
 		}
 
 		return instance;
 	}
 
-	final private Activity activity;
-
 	final private Set<AppInfoRefreshListener> listeners = new HashSet<AppInfoRefreshListener>();
-
-	private AppInfoManager(Activity activity)
-	{
-		this.activity = activity;
-
-	}
 
 	public void addListener(AppInfoRefreshListener testGetRecentApps)
 	{
@@ -69,7 +61,7 @@ class AppInfoManager
 		listeners.remove(testGetRecentApps);
 	}
 
-	public void refreshAsynchronized()
+	public void refreshAsynchronized(final Activity activity)
 	{
 		new AsyncTask<Void, AppInfoList, Void>()
 		{
@@ -104,7 +96,7 @@ class AppInfoManager
 
 					String packageName = intent.getComponent().getPackageName();
 
-					if (packageName == null || packageName.equalsIgnoreCase(AppInfoManager.this.activity.getPackageName()))
+					if (packageName == null || packageName.equalsIgnoreCase(activity.getPackageName()))
 					{
 						continue;
 					}

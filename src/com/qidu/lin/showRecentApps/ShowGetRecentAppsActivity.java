@@ -96,13 +96,13 @@ public class ShowGetRecentAppsActivity extends Activity
 					setLayoutAnimationForHoneycomb(vv);
 				}
 
-				adapter.onSearch(s.toString());
+				SearchManager.getInstance().onSearch(s.toString());
 			}
 		});
 
-		AppInfoManager.getInstance(this).addListener(adapter);
+		AppInfoManager.getInstance().addListener(adapter);
 		SearchManager.getInstance().setSearchResultListener(adapter);
-		AppInfoManager.getInstance(this).refreshAsynchronized();
+		AppInfoManager.getInstance().refreshAsynchronized(this);
 	}
 
 	/*
@@ -181,7 +181,7 @@ public class ShowGetRecentAppsActivity extends Activity
 	protected void onDestroy()
 	{
 		SearchManager.getInstance().setSearchResultListener(null);
-		AppInfoManager.getInstance(this).deleteListener(adapter);
+		AppInfoManager.getInstance().deleteListener(adapter);
 		super.onDestroy();
 	}
 
