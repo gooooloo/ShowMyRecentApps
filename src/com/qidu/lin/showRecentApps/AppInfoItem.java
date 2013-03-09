@@ -59,20 +59,21 @@ class AppInfoItem
 	{
 		return cnt;
 	}
-	
+
 	public Intent getLaunchIntent()
 	{
 		return launchIntent;
 	}
-	
+
 	public boolean equalsPackagename(String pn)
 	{
 		return packageName.equalsIgnoreCase(pn);
 	}
-	
+
 	public Intent getIntentToManageApp()
 	{
 
-		return new Intent("android.settings.APPLICATION_DETAILS_SETTINGS", Uri.fromParts("package", packageName, null));
+		return new Intent("android.settings.APPLICATION_DETAILS_SETTINGS", Uri.fromParts("package", packageName, null))
+				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	}
 }

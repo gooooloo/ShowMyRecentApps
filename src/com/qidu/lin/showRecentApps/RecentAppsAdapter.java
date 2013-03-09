@@ -167,7 +167,11 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 	private void startManageApp(AppInfoItem xxx)
 	{
-		showGetRecentAppsActivity.startActivity(xxx.getIntentToManageApp());
-		showGetRecentAppsActivity.finish();
+		Intent intentToManageApp = xxx.getIntentToManageApp();
+		if (intentToManageApp != null)
+		{
+			showGetRecentAppsActivity.startActivity(intentToManageApp);
+			showGetRecentAppsActivity.finish();
+		}
 	}
 }
