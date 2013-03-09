@@ -12,8 +12,19 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class RecentAppsAdapter
+public class RecentAppsAdapter implements AppInfoRefreshListener
 {
+
+	@Override
+	public void onAppInfoRefreshed(AppInfoList result)
+	{
+		if (showGetRecentAppsActivity.isFinishing())
+		{
+			return;
+		}
+
+		refreshWithData(result);
+	}
 
 	/**
 	 * 

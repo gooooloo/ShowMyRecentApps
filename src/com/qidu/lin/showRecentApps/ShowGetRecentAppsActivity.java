@@ -20,7 +20,7 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
-public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefreshListener
+public class ShowGetRecentAppsActivity extends Activity
 {
 	private static final float esp = 100;
 	private Float lastY;
@@ -57,17 +57,6 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 		startActivity(EMPTYActivity.getIntentToStart(this, intent));
 		finish();
 
-	}
-
-	@Override
-	public void onAppInfoRefreshed(AppInfoList result)
-	{
-		if (isFinishing())
-		{
-			return;
-		}
-
-		adapter.refreshWithData(result);
 	}
 
 	@Override
@@ -111,7 +100,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 			}
 		});
 
-		AppInfoManager.getInstance(this).addListener(this);
+		AppInfoManager.getInstance(this).addListener(adapter);
 		AppInfoManager.getInstance(this).refreshAsynchronized();
 	}
 
@@ -190,7 +179,7 @@ public class ShowGetRecentAppsActivity extends Activity implements AppInfoRefres
 	@Override
 	protected void onDestroy()
 	{
-		AppInfoManager.getInstance(this).deleteListener(this);
+		AppInfoManager.getInstance(this).deleteListener(adapter);
 		super.onDestroy();
 	}
 
