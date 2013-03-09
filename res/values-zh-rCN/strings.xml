@@ -2,5 +2,7 @@
 
     <string name="app_name">Lift应用启动器</string>
     <string name="tip_show_app_management">正在读取应用信息</string>
+    <string name="hint_when_keyboard_is_shown">搜索应用（拼音或数字，支持缩写）</string>
+    <string name="hint_when_keyboard_is_hidden">下拉弹出键盘</string>
 
 </resources>

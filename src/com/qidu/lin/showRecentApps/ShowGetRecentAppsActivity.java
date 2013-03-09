@@ -2,12 +2,12 @@
 
 package com.qidu.lin.showRecentApps;
 
-
 import android.animation.LayoutTransition;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.Editable;
@@ -15,6 +15,7 @@ import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
@@ -67,11 +68,14 @@ public class ShowGetRecentAppsActivity extends Activity
 
 		setContentView(R.layout.activity_test_get_recent_apps);
 
+		setupKeyboardListener();
+
 		final ViewGroup vv = (ViewGroup) findViewById(R.id.gridView1);
 
 		adapter = new RecentAppsAdapter(this, new RecentAppsLayoutOperater(vv));
 
-		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(new TextWatcher()
+		final EditText searchEditText = (EditText) findViewById(R.id.searchView1);
+		searchEditText.addTextChangedListener(new TextWatcher()
 		{
 
 			@Override
@@ -89,7 +93,6 @@ public class ShowGetRecentAppsActivity extends Activity
 			@Override
 			public void afterTextChanged(Editable s)
 			{
-
 				if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
 				{
 					setLayoutAnimationForHoneycomb(vv);
@@ -102,6 +105,37 @@ public class ShowGetRecentAppsActivity extends Activity
 		AppInfoManager.getInstance().addListener(adapter);
 		SearchManager.getInstance().setSearchResultListener(adapter);
 		AppInfoManager.getInstance().refreshAsynchronized(this);
+	}
+
+	// see
+	// http://stackoverflow.com/questions/2150078/how-to-check-visibility-of-software-keyboard-in-android.
+	private void setupKeyboardListener()
+	{
+		final View activityRootView = findViewById(R.id.root);
+		activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener()
+		{
+			@Override
+			public void onGlobalLayout()
+			{
+				Rect r = new Rect();
+				// r will be populated with the coordinates of your view that
+				// area still visible.
+				activityRootView.getWindowVisibleDisplayFrame(r);
+				int heightDiff = activityRootView.getRootView().getHeight() - (r.bottom - r.top);
+				if (heightDiff > 200)
+				{
+					// probably the keyboard is shown...
+					((EditText) findViewById(R.id.searchView1)).setHint(R.string.hint_when_keyboard_is_shown);
+				}
+				else if (heightDiff < -200)
+				{
+					// probably the keyboard is hidden...
+					((EditText) findViewById(R.id.searchView1)).setHint(R.string.hint_when_keyboard_is_hidden);
+
+				}
+
+			}
+		});
 	}
 
 	/*
@@ -164,11 +198,11 @@ public class ShowGetRecentAppsActivity extends Activity
 		// only will trigger it if no physical keyboard is open
 		mgr.showSoftInput(editText, InputMethodManager.SHOW_IMPLICIT);
 	}
-	
+
 	private void toggleKeyboard()
 	{
 		InputMethodManager mgr = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-		mgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.SHOW_IMPLICIT);
+		mgr.toggleSoftInput(InputMethodManager.SHOW_IMPLICIT, InputMethodManager.HIDE_NOT_ALWAYS);
 	}
 
 	@Override
