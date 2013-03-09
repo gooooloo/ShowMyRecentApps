@@ -82,8 +82,8 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				{
 					final AppInfoItem xxx = result.get(i);
 					final View view = layoutOperator.getViewByIndex(appinfoidViewMap.size());
-					final CharSequence label = xxx.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
-					final Drawable icon = xxx.getIcon(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager());
+					final CharSequence label = xxx.getLabel();
+					final Drawable icon = xxx.getIcon();
 
 					if (icon != null)
 					{
@@ -122,7 +122,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 					});
 
-					appinfoidViewMap.put(xxx.getId(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()), view);
+					appinfoidViewMap.put(xxx.getId(), view);
 
 					publishProgress(typeShowView, view);
 				}
@@ -130,7 +130,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				for (int i = 0; i < result.size(); i++)
 				{
 					PinYinBridge.getHanyuPinyin(result.get(i)
-							.getLabel(RecentAppsAdapter.this.showGetRecentAppsActivity.getPackageManager()).toString());
+							.getLabel().toString());
 				}
 
 				return null;
@@ -142,7 +142,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	@Override
 	public void onSearchResult(AppInfoItem appInfoItem, Boolean matched)
 	{
-		View view = appinfoidViewMap.get(appInfoItem.getId(PackageManagerCache.getPm()));
+		View view = appinfoidViewMap.get(appInfoItem.getId());
 		if (view == null)
 		{
 			return;

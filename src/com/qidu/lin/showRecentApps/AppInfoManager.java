@@ -2,7 +2,6 @@
 
 package com.qidu.lin.showRecentApps;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashSet;
@@ -108,7 +107,7 @@ class AppInfoManager
 				for (Map.Entry<String, Integer> eachEntry : appStatMgr.getAll().entrySet())
 				{
 					String packageName = eachEntry.getKey();
-					Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+					Intent launchIntent = PackageManagerCache.getPm().getLaunchIntentForPackage(packageName);
 
 					if (launchIntent == null)
 					{
@@ -140,14 +139,14 @@ class AppInfoManager
 
 				// getInstalledPackages takes time.
 				AppInfoList installedAppInfoList = new AppInfoList();
-				for (PackageInfo xx : activity.getPackageManager().getInstalledPackages(0))
+				for (PackageInfo xx : PackageManagerCache.getPm().getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
 					if (statedAppInfoList.containsThisPackage(packageName))
 					{
 						continue;
 					}
-					Intent launchIntent = activity.getPackageManager().getLaunchIntentForPackage(packageName);
+					Intent launchIntent = PackageManagerCache.getPm().getLaunchIntentForPackage(packageName);
 
 					if (launchIntent == null)
 					{

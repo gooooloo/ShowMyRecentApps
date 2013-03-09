@@ -4,7 +4,6 @@ package com.qidu.lin.showRecentApps;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -27,37 +26,37 @@ class AppInfoItem
 		return new AppInfoItem(packageName, cnt, launchIntent);
 	}
 
-	public String getId(PackageManager pm)
+	public String getId()
 	{
-		return "" + packageName + getLabel(pm);
+		return "" + packageName + getLabel();
 	}
 
-	public CharSequence getLabel(PackageManager pm)
+	public CharSequence getLabel()
 	{
 		ApplicationInfo applicationInfo = null;
 		try
 		{
-			applicationInfo = pm.getApplicationInfo(packageName, 0);
+			applicationInfo = PackageManagerCache.getPm().getApplicationInfo(packageName, 0);
 		}
 		catch (NameNotFoundException e)
 		{
 			e.printStackTrace();
 		}
-		return pm.getApplicationLabel(applicationInfo);
+		return PackageManagerCache.getPm().getApplicationLabel(applicationInfo);
 	}
 
-	public Drawable getIcon(PackageManager pm)
+	public Drawable getIcon()
 	{
 		ApplicationInfo applicationInfo = null;
 		try
 		{
-			applicationInfo = pm.getApplicationInfo(packageName, 0);
+			applicationInfo = PackageManagerCache.getPm().getApplicationInfo(packageName, 0);
 		}
 		catch (NameNotFoundException e)
 		{
 			e.printStackTrace();
 		}
-		return pm.getApplicationIcon(applicationInfo);
+		return PackageManagerCache.getPm().getApplicationIcon(applicationInfo);
 	}
 
 	public int getCount()

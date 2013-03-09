@@ -1,11 +1,7 @@
 package com.qidu.lin.showRecentApps;
 
-import java.util.Map;
-
-import android.content.pm.PackageManager;
 import android.os.AsyncTask;
 import android.util.Pair;
-import android.view.View;
 
 public class SearchManager
 {
@@ -35,7 +31,7 @@ public class SearchManager
 		{
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
-				String labelString = each.getLabel(PackageManagerCache.getPm()).toString();
+				String labelString = each.getLabel().toString();
 				boolean matched = match(labelString, params[0]);
 				this.publishProgress(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
