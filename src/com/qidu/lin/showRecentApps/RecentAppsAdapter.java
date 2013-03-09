@@ -11,7 +11,6 @@ import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultListener
 {
@@ -168,9 +167,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 	private void startManageApp(AppInfoItem xxx)
 	{
-//		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
-//		{
-		Toast.makeText(showGetRecentAppsActivity, "LONG PRESS", 1000).show();
-//		}
+		showGetRecentAppsActivity.startActivity(xxx.getIntentToManageApp());
+		showGetRecentAppsActivity.finish();
 	}
 }

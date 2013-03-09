@@ -7,6 +7,7 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 
 class AppInfoItem
 {
@@ -67,5 +68,11 @@ class AppInfoItem
 	public boolean equalsPackagename(String pn)
 	{
 		return packageName.equalsIgnoreCase(pn);
+	}
+	
+	public Intent getIntentToManageApp()
+	{
+
+		return new Intent("android.settings.APPLICATION_DETAILS_SETTINGS", Uri.fromParts("package", packageName, null));
 	}
 }
