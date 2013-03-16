@@ -196,7 +196,7 @@ public class ShowGetRecentAppsActivity extends Activity
 			layoutTransition.setStagger(LayoutTransition.CHANGE_DISAPPEARING, 0);
 
 			// Adding
-			ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "rotationY", 90f, 0f).setDuration(
+			ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "scaleY", 0f, 1f).setDuration(
 					layoutTransition.getDuration(LayoutTransition.APPEARING));
 			layoutTransition.setAnimator(LayoutTransition.APPEARING, animIn);
 			animIn.addListener(new AnimatorListenerAdapter()
@@ -204,12 +204,12 @@ public class ShowGetRecentAppsActivity extends Activity
 				public void onAnimationEnd(Animator anim)
 				{
 					View view = (View) ((ObjectAnimator) anim).getTarget();
-					view.setRotationY(0f);
+					view.setScaleY(1f);
 				}
 			});
 
 			// Removing
-			ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "rotationY", 0f, 90f).setDuration(
+			ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "scaleY", 1f, 0f).setDuration(
 					layoutTransition.getDuration(LayoutTransition.DISAPPEARING));
 			layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, animOut);
 			animOut.addListener(new AnimatorListenerAdapter()
@@ -217,7 +217,7 @@ public class ShowGetRecentAppsActivity extends Activity
 				public void onAnimationEnd(Animator anim)
 				{
 					View view = (View) ((ObjectAnimator) anim).getTarget();
-					view.setRotationY(0f);
+					view.setScaleY(0f);
 				}
 			});
 
