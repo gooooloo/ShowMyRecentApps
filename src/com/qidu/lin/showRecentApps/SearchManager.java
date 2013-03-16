@@ -1,5 +1,8 @@
 package com.qidu.lin.showRecentApps;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.os.AsyncTask;
 import android.util.Pair;
 
@@ -23,31 +26,36 @@ public class SearchManager
 		return instance;
 	}
 
-	class SearchAsyncTask extends AsyncTask<String, Pair<AppInfoItem, Boolean>, Void>
+	class SearchAsyncTask extends AsyncTask<String, List<Pair<AppInfoItem, Boolean>>, Void>
 	{
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(String... params)
 		{
+			List<Pair<AppInfoItem, Boolean>> xxx = new ArrayList<Pair<AppInfoItem, Boolean>>();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
 				String labelString = each.getLabel().toString();
 				boolean matched = match(labelString, params[0]);
-				this.publishProgress(new Pair<AppInfoItem, Boolean>(each, matched));
+				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
+			this.publishProgress(xxx);
 			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(Pair<AppInfoItem, Boolean>... values)
+		protected void onProgressUpdate(List<Pair<AppInfoItem, Boolean>>... values)
 		{
 			if (resultListner == null)
 			{
 				return;
 			}
-			for (Pair<AppInfoItem, Boolean> each : values)
+			for (List<Pair<AppInfoItem, Boolean>> eachgroup : values)
 			{
-				resultListner.onSearchResult(each.first, each.second);
+				for (Pair<AppInfoItem, Boolean> each : eachgroup)
+				{
+					resultListner.onSearchResult(each.first, each.second);
+				}
 			}
 		}
 
