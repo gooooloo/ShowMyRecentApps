@@ -193,7 +193,7 @@ public class ShowGetRecentAppsActivity extends Activity
 			LayoutTransition layoutTransition = new LayoutTransition();
 			vv.setLayoutTransition(layoutTransition);
 			layoutTransition.setStagger(LayoutTransition.CHANGE_APPEARING, 0);
-			layoutTransition.setStagger(LayoutTransition.CHANGE_DISAPPEARING, 0);
+			layoutTransition.setStagger(LayoutTransition.CHANGE_DISAPPEARING, 20);
 
 			// Adding
 			ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "scaleY", 0f, 1f).setDuration(
