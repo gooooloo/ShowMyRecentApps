@@ -209,7 +209,7 @@ public class ShowGetRecentAppsActivity extends Activity
 			});
 
 			// Removing
-			ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "rotationX", 0f, 90f).setDuration(
+			ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "rotationY", 0f, 90f).setDuration(
 					layoutTransition.getDuration(LayoutTransition.DISAPPEARING));
 			layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, animOut);
 			animOut.addListener(new AnimatorListenerAdapter()
@@ -217,7 +217,7 @@ public class ShowGetRecentAppsActivity extends Activity
 				public void onAnimationEnd(Animator anim)
 				{
 					View view = (View) ((ObjectAnimator) anim).getTarget();
-					view.setRotationX(0f);
+					view.setRotationY(0f);
 				}
 			});
 
