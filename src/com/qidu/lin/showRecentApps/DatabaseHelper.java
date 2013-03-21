@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
@@ -38,8 +39,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		onCreate(db);
 	}
 
+	static long profilingMsInsert = 0;
+	static long profilingMsQuery = 0;
+
 	public void insert(String name, String keyword, Boolean result)
 	{
+		long st = System.currentTimeMillis();
 		try
 		{
 			SQLiteDatabase db = getWritableDatabase();
@@ -54,23 +59,32 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		catch (Exception e)
 		{
 		}
+		profilingMsInsert += System.currentTimeMillis() - st;
+		Log.e("@@@", "insert:"+name+","+keyword+","+result);
+		Log.e("@@@", "profilingMsInsert:"+profilingMsInsert);
 	}
 
 	public Boolean select(String name, String keyword)
 	{
+		long st = System.currentTimeMillis();
 		Boolean ret = null;
 		SQLiteDatabase db = getReadableDatabase();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
 		Cursor c = db.query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
+		int ccc = -1;
 		if (c.getCount() > 0)
 		{
 			c.moveToFirst();
-			int ccc = c.getInt(0);
+		 ccc = c.getInt(0);
 			ret = (ccc == RESULT_MATCHED) ? true : (ccc == RESULT_UNMATCHED) ? false : null;
+			ccc=-2;
 		}
 
 		c.close();
 		db.close();
+		profilingMsQuery += System.currentTimeMillis() - st;
+		Log.e("@@@", "query:"+name+","+keyword+","+ret+","+ccc);
+		Log.e("@@@", "profilingMsQuery:"+profilingMsQuery);
 
 		return ret;
 	}
