@@ -1,11 +1,10 @@
 <resources>
 
     <string name="app_name">Lift App Entry</string>
-    <string name="menu_settings">Settings</string>
     <string name="title_activity_test_get_recent_apps">@string/app_name</string>
     <string name="title_activity_empty">EMPTYActivity</string>
     <string name="tip_show_app_management">it may take a while to show application information</string>
-    <string name="hint_when_keyboard_is_shown">search app, incomplete spelling is ok</string>
+    <string name="hint_when_keyboard_is_shown">search app, incomplete spelling is OK</string>
     <string name="hint_when_keyboard_is_hidden">slide down to show keyboard</string>
 
 </resources>

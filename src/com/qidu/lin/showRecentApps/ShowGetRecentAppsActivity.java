@@ -2,7 +2,10 @@
 
 package com.qidu.lin.showRecentApps;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Context;
@@ -101,7 +104,7 @@ public class ShowGetRecentAppsActivity extends Activity
 				SearchManager.getInstance().onSearch(ShowGetRecentAppsActivity.this, s.toString());
 			}
 		});
-		
+
 		PackageManagerCache.setPm(getPackageManager());
 
 		AppInfoManager.getInstance().addListener(adapter);
@@ -189,6 +192,35 @@ public class ShowGetRecentAppsActivity extends Activity
 		{
 			LayoutTransition layoutTransition = new LayoutTransition();
 			vv.setLayoutTransition(layoutTransition);
+			layoutTransition.setStagger(LayoutTransition.CHANGE_APPEARING, 0);
+			layoutTransition.setStagger(LayoutTransition.CHANGE_DISAPPEARING, 20);
+
+			// Adding
+			ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "scaleY", 0f, 1f).setDuration(
+					layoutTransition.getDuration(LayoutTransition.APPEARING));
+			layoutTransition.setAnimator(LayoutTransition.APPEARING, animIn);
+			animIn.addListener(new AnimatorListenerAdapter()
+			{
+				public void onAnimationEnd(Animator anim)
+				{
+					View view = (View) ((ObjectAnimator) anim).getTarget();
+					view.setScaleY(1f);
+				}
+			});
+
+			// Removing
+			ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "scaleY", 1f, 0f).setDuration(
+					layoutTransition.getDuration(LayoutTransition.DISAPPEARING));
+			layoutTransition.setAnimator(LayoutTransition.DISAPPEARING, animOut);
+			animOut.addListener(new AnimatorListenerAdapter()
+			{
+				public void onAnimationEnd(Animator anim)
+				{
+					View view = (View) ((ObjectAnimator) anim).getTarget();
+					view.setScaleY(0f);
+				}
+			});
+
 			layoutTransition.setDuration(300);
 		}
 	}
