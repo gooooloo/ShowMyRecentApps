@@ -9,6 +9,8 @@ import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
+	private static final int RESULT_MATCHED = 1;
+	private static final int RESULT_UNMATCHED = 0;
 	private static final String DATABASE_NAME = "search_result_cache.db";
 	private static final int DATABASE_VERSION = 1;
 	private static final String TABLE_NAME = "search_result";
@@ -25,7 +27,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		String string = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_1 + " TEXT PRIMARY KEY," + COLUMN_2 + " TEXT," + COLUMN_3 + " TEXT"
+		String string = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_1 + " TEXT PRIMARY KEY," + COLUMN_2 + " TEXT," + COLUMN_3 + " TINYINT"
 				+ ");";
 		Log.e("@@@", string);
 		db.execSQL(string);
@@ -38,7 +40,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		onCreate(db);
 	}
 
-	public void insert(String name, String keyword, String number)
+	public void insert(String name, String keyword, Boolean result)
 	{
 		try
 		{
@@ -47,7 +49,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 			ContentValues value = new ContentValues();
 			value.put(COLUMN_1, name);
 			value.put(COLUMN_2, keyword);
-			value.put(COLUMN_3, number);
+			value.put(COLUMN_3, result ? RESULT_MATCHED : RESULT_UNMATCHED);
 			db.replace(TABLE_NAME, null, value);
 			db.close();
 		}
@@ -56,9 +58,9 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		}
 	}
 
-	public String select(String name, String keyword)
+	public Boolean select(String name, String keyword)
 	{
-		String re = null;
+		Boolean re = null;
 		SQLiteDatabase db = getReadableDatabase();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
 		Log.e("@@@", select);
@@ -70,7 +72,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		else
 		{
 			c.moveToFirst();
-			re = c.getString(0);
+			int ccc = c.getInt(0);
+			re = (ccc == RESULT_MATCHED) ? true : (ccc == RESULT_UNMATCHED) ? false : null;
 		}
 
 		c.close();
