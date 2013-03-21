@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 public class DatabaseHelper extends SQLiteOpenHelper
 {
@@ -29,7 +28,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	{
 		String string = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_1 + " TEXT PRIMARY KEY," + COLUMN_2 + " TEXT," + COLUMN_3 + " TINYINT"
 				+ ");";
-		Log.e("@@@", string);
 		db.execSQL(string);
 	}
 
@@ -63,13 +61,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		Boolean re = null;
 		SQLiteDatabase db = getReadableDatabase();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
-		Log.e("@@@", select);
 		Cursor c = db.query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
-		if (c.getCount() == 0)
-		{
-
-		}
-		else
+		if (c.getCount() > 0)
 		{
 			c.moveToFirst();
 			int ccc = c.getInt(0);
