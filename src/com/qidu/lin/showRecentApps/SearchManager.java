@@ -1,5 +1,6 @@
 package com.qidu.lin.showRecentApps;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Pair;
 
@@ -25,6 +26,13 @@ public class SearchManager
 
 	class SearchAsyncTask extends AsyncTask<String, Pair<AppInfoItem, Boolean>, Void>
 	{
+		final Context context;
+
+		SearchAsyncTask(Context context)
+		{
+			this.context = context;
+		}
+
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(String... params)
@@ -52,6 +60,22 @@ public class SearchManager
 		}
 
 		private boolean match(String packageName, String string)
+		{
+			DatabaseHelper dh = new DatabaseHelper(context);
+			Boolean matched = dh.select(packageName, string);
+			if (matched == null)
+			{
+				boolean matchedRuntime = matchRuntime(packageName, string);
+				dh.insert(packageName, string, matchedRuntime);
+				return matchedRuntime;
+			}
+			else
+			{
+				return matched;
+			}
+		}
+
+		private boolean matchRuntime(String packageName, String string)
 		{
 			if (doSimpleMatch(packageName, string))
 			{
@@ -95,14 +119,14 @@ public class SearchManager
 
 	SearchAsyncTask searchAsyncTask = null;
 
-	public void onSearch(final String string)
+	public void onSearch(final Context context, final String string)
 	{
 		if (searchAsyncTask != null)
 		{
 			searchAsyncTask.cancel(true);
 		}
 
-		searchAsyncTask = new SearchAsyncTask();
+		searchAsyncTask = new SearchAsyncTask(context);
 		searchAsyncTask.execute(string);
 	}
 }

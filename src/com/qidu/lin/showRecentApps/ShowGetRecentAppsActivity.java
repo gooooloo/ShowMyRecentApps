@@ -98,7 +98,7 @@ public class ShowGetRecentAppsActivity extends Activity
 					setLayoutAnimationForHoneycomb(vv);
 				}
 
-				SearchManager.getInstance().onSearch(s.toString());
+				SearchManager.getInstance().onSearch(ShowGetRecentAppsActivity.this, s.toString());
 			}
 		});
 		
