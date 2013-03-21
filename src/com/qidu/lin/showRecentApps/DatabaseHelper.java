@@ -58,7 +58,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 
 	public Boolean select(String name, String keyword)
 	{
-		Boolean re = null;
+		Boolean ret = null;
 		SQLiteDatabase db = getReadableDatabase();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
 		Cursor c = db.query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
@@ -66,13 +66,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		{
 			c.moveToFirst();
 			int ccc = c.getInt(0);
-			re = (ccc == RESULT_MATCHED) ? true : (ccc == RESULT_UNMATCHED) ? false : null;
+			ret = (ccc == RESULT_MATCHED) ? true : (ccc == RESULT_UNMATCHED) ? false : null;
 		}
 
 		c.close();
-
 		db.close();
 
-		return re;
+		return ret;
 	}
 }
