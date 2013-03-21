@@ -1,5 +1,6 @@
 package com.qidu.lin.showRecentApps;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +70,21 @@ public class SearchManager
 
 		private boolean match(String packageName, String string)
 		{
+			if (packageName == null)
+			{
+				throw new InvalidParameterException("packageName should not be null");
+			}
+
+			if (string == null || string.isEmpty())
+			{
+				return true;
+			}
+
+			if (packageName.isEmpty())
+			{
+				return false;
+			}
+
 			DatabaseHelper dh = new DatabaseHelper(context);
 			Boolean matched = dh.select(packageName, string);
 			if (matched == null)
