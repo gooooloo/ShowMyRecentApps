@@ -1,5 +1,7 @@
 package com.qidu.lin.showRecentApps;
 
+import java.security.InvalidParameterException;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -27,7 +29,7 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	@Override
 	public void onCreate(SQLiteDatabase db)
 	{
-		String string = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_1 + " TEXT PRIMARY KEY," + COLUMN_2 + " TEXT," + COLUMN_3 + " TINYINT"
+		String string = "CREATE TABLE " + TABLE_NAME + " (" + COLUMN_1 + " TEXT," + COLUMN_2 + " TEXT," + COLUMN_3 + " TINYINT"
 				+ ");";
 		db.execSQL(string);
 	}
@@ -60,12 +62,17 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		{
 		}
 		profilingMsInsert += System.currentTimeMillis() - st;
-		Log.e("@@@", "insert:"+name+","+keyword+","+result);
-		Log.e("@@@", "profilingMsInsert:"+profilingMsInsert);
+		Log.e("@@@", "insert:" + name + "," + keyword + "," + result);
+		Log.e("@@@", "profilingMsInsert:" + profilingMsInsert);
 	}
 
 	public Boolean select(String name, String keyword)
 	{
+		if (keyword == null || keyword.isEmpty())
+		{
+			throw new InvalidParameterException("keyword should not be null or empty");
+		}
+
 		long st = System.currentTimeMillis();
 		Boolean ret = null;
 		SQLiteDatabase db = getReadableDatabase();
@@ -75,16 +82,16 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		if (c.getCount() > 0)
 		{
 			c.moveToFirst();
-		 ccc = c.getInt(0);
+			ccc = c.getInt(0);
 			ret = (ccc == RESULT_MATCHED) ? true : (ccc == RESULT_UNMATCHED) ? false : null;
-			ccc=-2;
+			ccc = -2;
 		}
 
 		c.close();
 		db.close();
 		profilingMsQuery += System.currentTimeMillis() - st;
-		Log.e("@@@", "query:"+name+","+keyword+","+ret+","+ccc);
-		Log.e("@@@", "profilingMsQuery:"+profilingMsQuery);
+		Log.e("@@@", "query:" + name + "," + keyword + "," + ret + "," + ccc);
+		Log.e("@@@", "profilingMsQuery:" + profilingMsQuery);
 
 		return ret;
 	}
