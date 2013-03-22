@@ -20,6 +20,32 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	private static final String COLUMN_1 = "label";
 	private static final String COLUMN_2 = "keyword";
 	private static final String COLUMN_3 = "matched";
+	
+	static logcator lsGetWritableDatabase = new logcator("getWrit");
+	static logcator lcClose = new logcator("close");
+	static logcator lcReplace = new logcator("update");
+	static logcator lcgetReadableDatabase = new logcator("getredLc");
+	static logcator lcQuery = new logcator("query");
+	
+	static class logcator
+	{
+		long total = 0;
+		long begin = 0;
+		private final String name;
+		public logcator(String name)
+		{
+			this.name = name;
+		}
+		public void begin()
+		{
+			begin = System.currentTimeMillis();
+		}
+		public void end()
+		{
+			total += System.currentTimeMillis() - begin;
+			Log.e("@@@",  ""+name+":"+total);
+		}
+	}
 
 	public DatabaseHelper(Context context)
 	{
@@ -41,29 +67,31 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		onCreate(db);
 	}
 
-	static long profilingMsInsert = 0;
-	static long profilingMsQuery = 0;
 
 	public void insert(String name, String keyword, Boolean result)
 	{
-		long st = System.currentTimeMillis();
 		try
 		{
+			lsGetWritableDatabase.begin();
 			SQLiteDatabase db = getWritableDatabase();
+			lsGetWritableDatabase.end();
 
 			ContentValues value = new ContentValues();
 			value.put(COLUMN_1, name);
 			value.put(COLUMN_2, keyword);
 			value.put(COLUMN_3, result ? RESULT_MATCHED : RESULT_UNMATCHED);
+			
+			lcReplace.begin();
 			db.replace(TABLE_NAME, null, value);
+			lcReplace.end();
+			
+			lcClose.begin();
 			db.close();
+			lcClose.end();
 		}
 		catch (Exception e)
 		{
 		}
-		profilingMsInsert += System.currentTimeMillis() - st;
-		Log.e("@@@", "insert:" + name + "," + keyword + "," + result);
-		Log.e("@@@", "profilingMsInsert:" + profilingMsInsert);
 	}
 
 	public Boolean select(String name, String keyword)
@@ -73,9 +101,12 @@ public class DatabaseHelper extends SQLiteOpenHelper
 			throw new InvalidParameterException("keyword should not be null or empty");
 		}
 
-		long st = System.currentTimeMillis();
 		Boolean ret = null;
+		lcgetReadableDatabase.begin();
 		SQLiteDatabase db = getReadableDatabase();
+		lcgetReadableDatabase.end();
+		
+		lcQuery.begin();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
 		Cursor c = db.query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
 		int ccc = -1;
@@ -88,10 +119,11 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		}
 
 		c.close();
+		lcQuery.end();
+		
+		lcClose.begin();
 		db.close();
-		profilingMsQuery += System.currentTimeMillis() - st;
-		Log.e("@@@", "query:" + name + "," + keyword + "," + ret + "," + ccc);
-		Log.e("@@@", "profilingMsQuery:" + profilingMsQuery);
+		lcClose.end();
 
 		return ret;
 	}
