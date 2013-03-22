@@ -68,13 +68,8 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 
-	public void insert(String name, String keyword, Boolean result)
+	public static void insert(SQLiteDatabase db,String name, String keyword, Boolean result)
 	{
-		try
-		{
-			lsGetWritableDatabase.begin();
-			SQLiteDatabase db = getWritableDatabase();
-			lsGetWritableDatabase.end();
 
 			ContentValues value = new ContentValues();
 			value.put(COLUMN_1, name);
@@ -85,16 +80,24 @@ public class DatabaseHelper extends SQLiteOpenHelper
 			db.replace(TABLE_NAME, null, value);
 			lcReplace.end();
 			
-			lcClose.begin();
-			db.close();
-			lcClose.end();
-		}
-		catch (Exception e)
-		{
-		}
+	}
+	
+	public SQLiteDatabase doOpen()
+	{
+		lcgetReadableDatabase.begin();
+		SQLiteDatabase db = getWritableDatabase();
+		lcgetReadableDatabase.end();
+		return db;
+	}
+	
+	public void doClose(SQLiteDatabase db)
+	{
+		lcClose.begin();
+		db.close();
+		lcClose.end();
 	}
 
-	public Boolean select(String name, String keyword)
+	public static Boolean select(SQLiteDatabase db, String name, String keyword)
 	{
 		if (keyword == null || keyword.isEmpty())
 		{
@@ -102,13 +105,10 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		}
 
 		Boolean ret = null;
-		lcgetReadableDatabase.begin();
-		SQLiteDatabase db = getReadableDatabase();
-		lcgetReadableDatabase.end();
 		
 		lcQuery.begin();
 		String select = COLUMN_1 + "='" + name + "' AND " + COLUMN_2 + "='" + keyword + "'";
-		Cursor c = db.query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
+		Cursor c = db .query(TABLE_NAME, new String[] { COLUMN_3 }, select, null, null, null, null);
 		int ccc = -1;
 		if (c.getCount() > 0)
 		{
@@ -121,9 +121,6 @@ public class DatabaseHelper extends SQLiteOpenHelper
 		c.close();
 		lcQuery.end();
 		
-		lcClose.begin();
-		db.close();
-		lcClose.end();
 
 		return ret;
 	}

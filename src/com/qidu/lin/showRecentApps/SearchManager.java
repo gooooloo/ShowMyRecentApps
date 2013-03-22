@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.util.Pair;
 
@@ -42,13 +43,18 @@ public class SearchManager
 		protected Void doInBackground(String... params)
 		{
 			List<Pair<AppInfoItem, Boolean>> xxx = new ArrayList<Pair<AppInfoItem, Boolean>>();
+
+			DatabaseHelper dh = new DatabaseHelper(context);
+			SQLiteDatabase db = dh.doOpen();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
 				String labelString = each.getLabel().toString();
-				boolean matched = match(labelString, params[0]);
+				boolean matched = match(db, labelString, params[0]);
 				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
+
 			this.publishProgress(xxx);
+			dh.doClose(db);
 			return null;
 		}
 
@@ -68,7 +74,7 @@ public class SearchManager
 			}
 		}
 
-		private boolean match(String packageName, String string)
+		private boolean match(SQLiteDatabase db, String packageName, String string)
 		{
 			if (packageName == null)
 			{
@@ -85,12 +91,11 @@ public class SearchManager
 				return false;
 			}
 
-			DatabaseHelper dh = new DatabaseHelper(context);
-			Boolean matched = dh.select(packageName, string);
+			Boolean matched = DatabaseHelper.select(db, packageName, string);
 			if (matched == null)
 			{
 				boolean matchedRuntime = matchRuntime(packageName, string);
-				dh.insert(packageName, string, matchedRuntime);
+				DatabaseHelper.insert(db, packageName, string, matchedRuntime);
 				return matchedRuntime;
 			}
 			else
