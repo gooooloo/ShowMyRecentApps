@@ -32,6 +32,7 @@ public class SearchManager
 	class SearchAsyncTask extends AsyncTask<String, List<Pair<AppInfoItem, Boolean>>, Void>
 	{
 		final Context context;
+		private DatabaseHelper dh;
 
 		SearchAsyncTask(Context context)
 		{
@@ -44,12 +45,35 @@ public class SearchManager
 		{
 			List<Pair<AppInfoItem, Boolean>> xxx = new ArrayList<Pair<AppInfoItem, Boolean>>();
 
-			DatabaseHelper dh = new DatabaseHelper(context);
-			SQLiteDatabase db = dh.doOpen();
+			this.dh = new DatabaseHelper(context);
+			SQLiteDatabase db = dh.doOpenDbForQuery();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
 				String labelString = each.getLabel().toString();
-				boolean matched = match(db, labelString, params[0]);
+				Boolean matched = null;
+				if (labelString == null)
+				{
+					throw new InvalidParameterException("packageName should not be null");
+				}
+				else if (params[0] == null || params[0].isEmpty())
+				{
+					matched = true;
+				}
+				else if (labelString.isEmpty())
+				{
+					matched = false;
+				}
+				else
+				{
+					matched = DatabaseHelper.select(db, labelString, params[0]);
+
+					if (matched == null)
+					{
+						matched = matchRuntime(labelString, params[0]);
+						dh.insert(labelString, params[0], matched);
+					}
+				}
+				
 				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
 
@@ -74,35 +98,6 @@ public class SearchManager
 			}
 		}
 
-		private boolean match(SQLiteDatabase db, String packageName, String string)
-		{
-			if (packageName == null)
-			{
-				throw new InvalidParameterException("packageName should not be null");
-			}
-
-			if (string == null || string.isEmpty())
-			{
-				return true;
-			}
-
-			if (packageName.isEmpty())
-			{
-				return false;
-			}
-
-			Boolean matched = DatabaseHelper.select(db, packageName, string);
-			if (matched == null)
-			{
-				boolean matchedRuntime = matchRuntime(packageName, string);
-				DatabaseHelper.insert(db, packageName, string, matchedRuntime);
-				return matchedRuntime;
-			}
-			else
-			{
-				return matched;
-			}
-		}
 
 		private boolean matchRuntime(String packageName, String string)
 		{

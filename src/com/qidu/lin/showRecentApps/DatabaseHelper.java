@@ -68,24 +68,27 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 
-	public static void insert(SQLiteDatabase db,String name, String keyword, Boolean result)
+	public void insert(String name, String keyword, Boolean result)
 	{
-
-			ContentValues value = new ContentValues();
-			value.put(COLUMN_1, name);
-			value.put(COLUMN_2, keyword);
-			value.put(COLUMN_3, result ? RESULT_MATCHED : RESULT_UNMATCHED);
-			
-			lcReplace.begin();
-			db.replace(TABLE_NAME, null, value);
-			lcReplace.end();
-			
+		//TODO : enable it
+//		SQLiteDatabase db = getWritableDatabase();
+//
+//			ContentValues value = new ContentValues();
+//			value.put(COLUMN_1, name);
+//			value.put(COLUMN_2, keyword);
+//			value.put(COLUMN_3, result ? RESULT_MATCHED : RESULT_UNMATCHED);
+//			
+//			lcReplace.begin();
+//			db.replace(TABLE_NAME, null, value);
+//			lcReplace.end();
+//
+//			db.close();
 	}
 	
-	public SQLiteDatabase doOpen()
+	public SQLiteDatabase doOpenDbForQuery()
 	{
 		lcgetReadableDatabase.begin();
-		SQLiteDatabase db = getWritableDatabase();
+		SQLiteDatabase db = getReadableDatabase();
 		lcgetReadableDatabase.end();
 		return db;
 	}
