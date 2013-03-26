@@ -45,6 +45,7 @@ public class SearchManager
 		@Override
 		protected Void doInBackground(String... params)
 		{
+			// TODO : DDMS shows memory usage : 16MB. Better no more than 1 MB.
 			List<Pair<AppInfoItem, Boolean>> searchResults = new ArrayList<Pair<AppInfoItem, Boolean>>();
 			List<DatabaseHelper.Row> writingBackResult = new ArrayList<DatabaseHelper.Row>();
 
