@@ -4,6 +4,8 @@ import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.qidu.lin.showRecentApps.SearchResultCache.SearchTarget;
+
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -11,6 +13,7 @@ import android.util.Pair;
 
 public class SearchManager
 {
+	private SearchResultCache searchResultCache = new SearchResultCache();
 	private SearchResultListener resultListner = null;
 
 	private SearchManager()
@@ -67,13 +70,24 @@ public class SearchManager
 				}
 				else
 				{
-					matched = DatabaseHelper.select(dbReadable, labelString, keyword);
-
-					if (matched == null)
+					SearchTarget searchTarget = new SearchTarget(labelString, keyword);
+					if (searchResultCache.hasCacheFor(searchTarget))
 					{
-						matched = matchRuntime(labelString, keyword);
-						DatabaseHelper.Row row = new DatabaseHelper.Row(labelString, keyword, matched);
-						writingBackResult.add(row);
+						matched = searchResultCache.getCachedResultFor(searchTarget);
+					}
+					else
+					{
+						
+						matched = DatabaseHelper.select(dbReadable, labelString, keyword);
+
+						if (matched == null)
+						{
+							matched = matchRuntime(labelString, keyword);
+							DatabaseHelper.Row row = new DatabaseHelper.Row(labelString, keyword, matched);
+							writingBackResult.add(row);
+						}
+						
+						searchResultCache.setCacheFor(searchTarget, matched);
 					}
 				}
 
