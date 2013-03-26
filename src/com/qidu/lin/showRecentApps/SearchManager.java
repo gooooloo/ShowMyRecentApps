@@ -55,27 +55,25 @@ public class SearchManager
 				{
 					throw new InvalidParameterException("packageName should not be null");
 				}
+
+				final String keyword = params[0];
+				if (keyword == null || keyword.isEmpty())
+				{
+					matched = true;
+				}
+				else if (labelString.isEmpty())
+				{
+					matched = false;
+				}
 				else
 				{
-					final String keyword = params[0];
-					if (keyword == null || keyword.isEmpty())
-					{
-						matched = true;
-					}
-					else if (labelString.isEmpty())
-					{
-						matched = false;
-					}
-					else
-					{
-						matched = DatabaseHelper.select(dbReadable, labelString, keyword);
+					matched = DatabaseHelper.select(dbReadable, labelString, keyword);
 
-						if (matched == null)
-						{
-							matched = matchRuntime(labelString, keyword);
-							DatabaseHelper.Row row = new DatabaseHelper.Row(labelString, keyword, matched);
-							writingBackResult.add(row);
-						}
+					if (matched == null)
+					{
+						matched = matchRuntime(labelString, keyword);
+						DatabaseHelper.Row row = new DatabaseHelper.Row(labelString, keyword, matched);
+						writingBackResult.add(row);
 					}
 				}
 
