@@ -32,7 +32,6 @@ public class SearchManager
 	class SearchAsyncTask extends AsyncTask<String, List<Pair<AppInfoItem, Boolean>>, Void>
 	{
 		final Context context;
-		private DatabaseHelper dh;
 
 		SearchAsyncTask(Context context)
 		{
@@ -43,10 +42,11 @@ public class SearchManager
 		@Override
 		protected Void doInBackground(String... params)
 		{
-			List<Pair<AppInfoItem, Boolean>> xxx = new ArrayList<Pair<AppInfoItem, Boolean>>();
+			List<Pair<AppInfoItem, Boolean>> searchResults = new ArrayList<Pair<AppInfoItem, Boolean>>();
+			List<DatabaseHelper.Row> writingBackResult = new ArrayList<DatabaseHelper.Row>();
 
-			this.dh = new DatabaseHelper(context);
-			SQLiteDatabase db = dh.doOpenDbForQuery();
+			DatabaseHelper dh = new DatabaseHelper(context);
+			SQLiteDatabase dbReadable = dh.doOpenDbForQuery();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
 				String labelString = each.getLabel().toString();
@@ -65,20 +65,29 @@ public class SearchManager
 				}
 				else
 				{
-					matched = DatabaseHelper.select(db, labelString, params[0]);
+					matched = DatabaseHelper.select(dbReadable, labelString, params[0]);
 
 					if (matched == null)
 					{
 						matched = matchRuntime(labelString, params[0]);
-						dh.insert(labelString, params[0], matched);
+						DatabaseHelper.Row row = new DatabaseHelper.Row(labelString, params[0], matched);
+						writingBackResult.add(row);
 					}
 				}
-				
-				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
+
+				searchResults.add(new Pair<AppInfoItem, Boolean>(each, matched));
 			}
 
-			this.publishProgress(xxx);
-			dh.doClose(db);
+			this.publishProgress(searchResults);
+			dh.doClose(dbReadable);
+
+			SQLiteDatabase dbWritable = dh.doOpenDbForUpdate();
+			for (DatabaseHelper.Row row : writingBackResult)
+			{
+				dh.insert(dbWritable, row);
+			}
+			dh.doClose(dbWritable);
+
 			return null;
 		}
 
@@ -97,7 +106,6 @@ public class SearchManager
 				}
 			}
 		}
-
 
 		private boolean matchRuntime(String packageName, String string)
 		{

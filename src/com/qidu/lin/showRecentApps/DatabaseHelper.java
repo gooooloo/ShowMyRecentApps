@@ -27,6 +27,32 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	static logcator lcgetReadableDatabase = new logcator("getredLc");
 	static logcator lcQuery = new logcator("query");
 	
+	public static class Row
+	{
+		private final String Label;
+		private final String keywork;
+		private final boolean matched;
+		public Row(String label, String keywork, boolean matched)
+		{
+			super();
+			Label = label;
+			this.keywork = keywork;
+			this.matched = matched;
+		}
+		public String getLabel()
+		{
+			return Label;
+		}
+		public String getKeywork()
+		{
+			return keywork;
+		}
+		public boolean isMatched()
+		{
+			return matched;
+		}
+	}
+	
 	static class logcator
 	{
 		long total = 0;
@@ -68,27 +94,29 @@ public class DatabaseHelper extends SQLiteOpenHelper
 	}
 
 
-	public void insert(String name, String keyword, Boolean result)
+	public void insert( SQLiteDatabase db, Row row)
 	{
-		//TODO : enable it
-//		SQLiteDatabase db = getWritableDatabase();
-//
-//			ContentValues value = new ContentValues();
-//			value.put(COLUMN_1, name);
-//			value.put(COLUMN_2, keyword);
-//			value.put(COLUMN_3, result ? RESULT_MATCHED : RESULT_UNMATCHED);
-//			
-//			lcReplace.begin();
-//			db.replace(TABLE_NAME, null, value);
-//			lcReplace.end();
-//
-//			db.close();
+			ContentValues value = new ContentValues();
+			value.put(COLUMN_1, row.getLabel());
+			value.put(COLUMN_2, row.getKeywork());
+			value.put(COLUMN_3, row.isMatched() ? RESULT_MATCHED : RESULT_UNMATCHED);
+			
+			lcReplace.begin();
+			db.replace(TABLE_NAME, null, value);
+			lcReplace.end();
 	}
 	
 	public SQLiteDatabase doOpenDbForQuery()
 	{
 		lcgetReadableDatabase.begin();
 		SQLiteDatabase db = getReadableDatabase();
+		lcgetReadableDatabase.end();
+		return db;
+	}
+	public SQLiteDatabase doOpenDbForUpdate()
+	{
+		lcgetReadableDatabase.begin();
+		SQLiteDatabase db = getWritableDatabase();
 		lcgetReadableDatabase.end();
 		return db;
 	}
