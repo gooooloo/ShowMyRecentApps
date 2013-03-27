@@ -10,17 +10,19 @@
 
     <ImageView
         android:id="@+id/imageView1"
-        android:src="@android:drawable/stat_notify_sync"
         android:layout_width="60dp"
         android:layout_height="60dp"
         android:layout_gravity="center"
-        android:layout_margin="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginTop="10dp"
         android:gravity="center"
-        android:scaleType="fitCenter" />
+        android:scaleType="fitCenter"
+        android:src="@android:drawable/stat_notify_sync" />
 
     <TextView
         android:id="@+id/editText1"
-        android:layout_width="40dp"
+        android:layout_width="60dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
@@ -33,6 +35,7 @@
         android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginBottom="10dp"
         android:gravity="center"
         android:maxLines="1"
         android:textSize="10sp" >
