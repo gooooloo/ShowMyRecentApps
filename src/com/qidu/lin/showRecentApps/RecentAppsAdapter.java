@@ -3,6 +3,7 @@ package com.qidu.lin.showRecentApps;
 import java.util.HashMap;
 import java.util.Map;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -47,7 +48,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		final int typeSetText = 0;
 		final int typeSetImage = 1;
 		final int typeShowView = 2;
-		new AsyncTask<Void, Object, Void>()
+		AsyncTask<Void, Object, Void> x = new AsyncTask<Void, Object, Void>()
 		{
 
 			@Override
@@ -129,14 +130,28 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 				for (int i = 0; i < result.size(); i++)
 				{
-					PinYinBridge.getHanyuPinyin(result.get(i)
-							.getLabel().toString());
+					PinYinBridge.getHanyuPinyin(result.get(i).getLabel().toString());
 				}
 
 				return null;
 			}
-		}.execute();
+		};
 
+		executeRefreshWithDataAsyncTask(x);
+
+	}
+
+	@SuppressLint("NewApi")
+	private void executeRefreshWithDataAsyncTask(AsyncTask<Void, Object, Void> x)
+	{
+		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
+		{
+			x.executeOnExecutor(x.THREAD_POOL_EXECUTOR);
+		}
+		else
+		{
+			x.execute();
+		}
 	}
 
 	@Override
