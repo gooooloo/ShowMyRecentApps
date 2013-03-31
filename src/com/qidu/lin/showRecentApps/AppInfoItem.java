@@ -11,19 +11,17 @@ import android.net.Uri;
 class AppInfoItem
 {
 	final private int cnt;
-	final private Intent launchIntent;
 	final private String packageName;
 
-	private AppInfoItem(String packageName, int cnt, Intent launchIntent)
+	private AppInfoItem(String packageName, int cnt)
 	{
 		this.packageName = packageName;
 		this.cnt = cnt;
-		this.launchIntent = launchIntent;
 	}
 
-	public static AppInfoItem makeInstance(String packageName, int cnt, Intent launchIntent)
+	public static AppInfoItem makeInstance(String packageName, int cnt)
 	{
-		return new AppInfoItem(packageName, cnt, launchIntent);
+		return new AppInfoItem(packageName, cnt);
 	}
 
 	public String getId()
@@ -66,7 +64,10 @@ class AppInfoItem
 
 	public Intent getLaunchIntent()
 	{
-		return launchIntent;
+		// calling getLaunchIntentForPackage() takes time, and we actually dont
+		// need this until you really click on the item. So delay compute it on
+		// demand.
+		return PackageManagerCache.getPm().getLaunchIntentForPackage(packageName);
 	}
 
 	public boolean equalsPackagename(String pn)

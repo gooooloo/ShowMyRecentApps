@@ -116,7 +116,7 @@ class AppInfoManager
 
 					Integer count = (Integer) eachEntry.getValue();
 
-					statedAppInfoList.add(AppInfoItem.makeInstance(packageName, count, launchIntent));
+					statedAppInfoList.add(AppInfoItem.makeInstance(packageName, count));
 				}
 
 				Comparator<AppInfoItem> comparator = new Comparator<AppInfoItem>()
@@ -146,14 +146,8 @@ class AppInfoManager
 					{
 						continue;
 					}
-					Intent launchIntent = PackageManagerCache.getPm().getLaunchIntentForPackage(packageName);
 
-					if (launchIntent == null)
-					{
-						continue;
-					}
-
-					installedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0, launchIntent));
+					installedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0));
 
 				}
 

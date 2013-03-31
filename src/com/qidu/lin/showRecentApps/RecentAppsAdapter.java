@@ -106,8 +106,12 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 						@Override
 						public void onClick(View arg0)
 						{
-							RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(xxx.getLaunchIntent().addFlags(
-									Intent.FLAG_ACTIVITY_NEW_TASK));
+							Intent launchIntent = xxx.getLaunchIntent();
+							if (launchIntent != null)
+							{
+								RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(launchIntent
+										.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+							}
 						}
 					});
 
