@@ -71,6 +71,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 	{
 		for (int i = 0; i < count; i++)
 		{
+			// TODO : inflate takes too long time.
 			View view = fi.inflate(R.layout.entry, null);
 			viewInfos.put(view, new Pair<Boolean, Integer>(true, viewInfos.size()));
 
