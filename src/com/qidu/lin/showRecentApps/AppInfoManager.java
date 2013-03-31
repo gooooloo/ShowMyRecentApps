@@ -14,6 +14,8 @@ import android.app.ActivityManager;
 import android.app.ActivityManager.RecentTaskInfo;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 
 class AppInfoManager
@@ -104,12 +106,21 @@ class AppInfoManager
 				}
 
 				AppInfoList statedAppInfoList = new AppInfoList();
+				PackageManager pm = PackageManagerCache.getPm();
 				for (Map.Entry<String, Integer> eachEntry : appStatMgr.getAll().entrySet())
 				{
 					String packageName = eachEntry.getKey();
-					Intent launchIntent = PackageManagerCache.getPm().getLaunchIntentForPackage(packageName);
 
-					if (launchIntent == null)
+					// detect whether the package is installed. We dont care
+					// about GIDS actually, but because we dont have directly
+					// api to detect whether a package is installed, so we query
+					// the package info, and choosing the GET_GIDS is because it
+					// would be fast compared with other options.
+					try
+					{
+						pm.getPackageInfo(packageName, PackageManager.GET_GIDS);
+					}
+					catch (NameNotFoundException e)
 					{
 						continue;
 					}
@@ -139,7 +150,7 @@ class AppInfoManager
 
 				// getInstalledPackages takes time.
 				AppInfoList installedAppInfoList = new AppInfoList();
-				for (PackageInfo xx : PackageManagerCache.getPm().getInstalledPackages(0))
+				for (PackageInfo xx : pm.getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
 					if (statedAppInfoList.containsThisPackage(packageName))
