@@ -184,18 +184,30 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 					layoutOperator.reserveViews((List<View>) values[1]);
 					break;
 				default:
+					// empty
 				}
 			}
 
 			@Override
 			protected Void doInBackground(Void... params)
 			{
+				final int maxUIReserveNum = 15;
 				ArrayList<View> reservedViews = new ArrayList<View>();
-				for (int i = 0; i < result.size(); i++)
+				ArrayList<View> reservedViewsUI = new ArrayList<View>();
+				for (int i = 0; i < result.size() && i < maxUIReserveNum; i++)
 				{
-					reservedViews.add(inflateEntry(showGetRecentAppsActivity.getLayoutInflater()));
+					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+					reservedViews.add(view);
+					reservedViewsUI.add(view);
 				}
-				publishProgress(typeReserveViews, reservedViews);
+				publishProgress(typeReserveViews, reservedViewsUI);
+
+				for (int i = maxUIReserveNum; i < result.size(); i++)
+				{
+					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+					reservedViews.add(view);
+					layoutOperator.reserveViewInBackground(view);
+				}
 
 				for (int i = 0; i < result.size(); i++)
 				{

@@ -33,23 +33,32 @@ class RecentAppsLayoutOperater implements LayoutOperator
 
 	private Boolean isViewShown(View view)
 	{
-		return viewInfos.get(view).first;
+		synchronized (viewInfos)
+		{
+			return viewInfos.containsKey(view) && viewInfos.get(view).first;
+		}
 	}
 
 	private void putViewShown(View view, boolean shown)
 	{
-		viewInfos.put(view, new Pair<Boolean, Integer>(shown, viewInfos.get(view).second));
+		synchronized (viewInfos)
+		{
+			viewInfos.put(view, new Pair<Boolean, Integer>(shown, viewInfos.get(view).second));
+		}
 	}
 
 	private int getShownViewCountAhead(View view)
 	{
 		int cnt = 0;
-		int targetViewIndex = viewInfos.get(view).second;
-		for (Map.Entry<View, Pair<Boolean, Integer>> eachInfo : viewInfos.entrySet())
+		synchronized (viewInfos)
 		{
-			if (eachInfo.getValue().first && eachInfo.getValue().second < targetViewIndex)
+			int targetViewIndex = viewInfos.get(view).second;
+			for (Map.Entry<View, Pair<Boolean, Integer>> eachInfo : viewInfos.entrySet())
 			{
-				cnt++;
+				if (eachInfo.getValue().first && eachInfo.getValue().second < targetViewIndex)
+				{
+					cnt++;
+				}
 			}
 		}
 		return cnt;
@@ -71,9 +80,23 @@ class RecentAppsLayoutOperater implements LayoutOperator
 	{
 		for (View view : views)
 		{
-			viewInfos.put(view, new Pair<Boolean, Integer>(true, viewInfos.size()));
+			addViewInfo(view, true);
 
 			parentLayout.addView(view);
+		}
+	}
+
+	@Override
+	public void reserveViewInBackground(View view)
+	{
+		addViewInfo(view, false);
+	}
+
+	private void addViewInfo(View view, boolean visible)
+	{
+		synchronized (viewInfos)
+		{
+			viewInfos.put(view, new Pair<Boolean, Integer>(visible, viewInfos.size()));
 		}
 	}
 

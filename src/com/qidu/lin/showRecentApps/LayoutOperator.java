@@ -15,4 +15,6 @@ interface LayoutOperator
 	View getViewByIndex(int index);
 
 	void reserveViews(List<View> views);
+	
+	public void reserveViewInBackground(View view);
 }
