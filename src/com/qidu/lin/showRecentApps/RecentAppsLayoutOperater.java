@@ -147,7 +147,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		labelTv.setLayoutParams(labellp);
 		labelTv.setMaxLines(entry_label_max_lines);
 		labelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, entry_label_text_size);
-		labelTv.setText("a");
+		labelTv.setGravity(entry_label_gravity);
 		layout.addView(labelTv);
 
 		TextView countTV = new TextView(context);
@@ -158,7 +158,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		countTV.setLayoutParams(countlp);
 		countTV.setMaxLines(entry_count_max_lines);
 		countTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, entry_count_text_size);
-		countTV.setText("0");
+		countTV.setGravity(entry_count_gravity);
 		layout.addView(countTV);
 
 		return layout;
