@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -115,9 +116,6 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		// inflate from xml takes too long time, so inflate from Java codes.
 
 		Context context = fi.getContext();
-		
-		
-		entry_height = 220;
 
 		LinearLayout layout = new LinearLayout(context);
 		GridLayout.LayoutParams lp = new GridLayout.LayoutParams();
@@ -148,7 +146,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		labellp.gravity = entry_label_gravity;
 		labelTv.setLayoutParams(labellp);
 		labelTv.setMaxLines(entry_label_max_lines);
-		labelTv.setTextSize(entry_label_text_size);
+		labelTv.setTextSize(TypedValue.COMPLEX_UNIT_SP, entry_label_text_size);
 		labelTv.setText("a");
 		layout.addView(labelTv);
 
@@ -159,7 +157,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		labellp.bottomMargin = entry_margin_bottom;
 		countTV.setLayoutParams(countlp);
 		countTV.setMaxLines(entry_count_max_lines);
-		countTV.setTextSize(entry_count_text_size);
+		countTV.setTextSize(TypedValue.COMPLEX_UNIT_SP, entry_count_text_size);
 		countTV.setText("0");
 		layout.addView(countTV);
 
@@ -170,7 +168,7 @@ class RecentAppsLayoutOperater implements LayoutOperator
 	{
 		Resources resources = context.getResources();
 		this.entry_width = ViewGroup.LayoutParams.WRAP_CONTENT;
-		this.entry_height = resources.getDimensionPixelSize(R.dimen.entry_height);
+		this.entry_height = ViewGroup.LayoutParams.WRAP_CONTENT;
 		this.entry_gravity = Gravity.CENTER;
 		this.entry_image_width = resources.getDimensionPixelSize(R.dimen.entry_image_width);
 		this.entry_image_height = resources.getDimensionPixelSize(R.dimen.entry_image_height);
