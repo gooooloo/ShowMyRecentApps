@@ -2,7 +2,8 @@
 
 package com.qidu.lin.showRecentApps;
 
-import android.view.LayoutInflater;
+import java.util.List;
+
 import android.view.View;
 
 interface LayoutOperator
@@ -13,5 +14,5 @@ interface LayoutOperator
 	
 	View getViewByIndex(int index);
 
-	void reserveViews(LayoutInflater fi, int count);
+	void reserveViews(List<View> views);
 }
