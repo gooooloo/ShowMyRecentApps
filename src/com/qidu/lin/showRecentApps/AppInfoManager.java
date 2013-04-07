@@ -141,15 +141,8 @@ class AppInfoManager
 				};
 				Collections.sort(statedAppInfoList, comparator);
 
-				for (AppInfoItem each : statedAppInfoList)
-				{
-					addPackageLabel(each);
-				}
 
-				publishProgress(statedAppInfoList);
 
-				// getInstalledPackages takes time.
-				AppInfoList installedAppInfoList = new AppInfoList();
 				for (PackageInfo xx : pm.getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
@@ -158,16 +151,16 @@ class AppInfoManager
 						continue;
 					}
 
-					installedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0));
+					statedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0));
 
 				}
 
-				for (AppInfoItem each : installedAppInfoList)
+				for (AppInfoItem each : statedAppInfoList)
 				{
 					addPackageLabel(each);
 				}
 
-				publishProgress(installedAppInfoList);
+				publishProgress(statedAppInfoList);
 				return null;
 			}
 
