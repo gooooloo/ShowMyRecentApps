@@ -35,6 +35,11 @@ public class SearchManager
 			List<Pair<AppInfoItem, Boolean>> xxx = new ArrayList<Pair<AppInfoItem, Boolean>>();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
+				if (this.isCancelled())
+				{
+					return null;
+				}
+
 				String labelString = each.getLabel().toString();
 				boolean matched = match(labelString, params[0]);
 				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
@@ -52,8 +57,16 @@ public class SearchManager
 			}
 			for (List<Pair<AppInfoItem, Boolean>> eachgroup : values)
 			{
+				if (this.isCancelled())
+				{
+					return;
+				}
 				for (Pair<AppInfoItem, Boolean> each : eachgroup)
 				{
+					if (this.isCancelled())
+					{
+						return;
+					}
 					resultListner.onSearchResult(each.first, each.second);
 				}
 			}
