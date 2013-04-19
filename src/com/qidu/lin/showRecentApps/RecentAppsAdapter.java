@@ -106,7 +106,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	{
 		final int typeSetText = 0;
 		final int typeSetImage = 1;
-		final int typeShowView = 2;
 		final int typeReserveViews = 3;
 
 		AsyncTask<Void, Object, Void> x = new AsyncTask<Void, Object, Void>()
@@ -177,9 +176,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				case typeSetImage:
 					((ImageView) values[1]).setImageDrawable((Drawable) values[2]);
 					break;
-				case typeShowView:
-					layoutOperator.showView((View) values[1]);
-					break;
 				case typeReserveViews:
 					layoutOperator.reserveViews((List<View>) values[1]);
 					break;
@@ -192,75 +188,8 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			protected Void doInBackground(Void... params)
 			{
 				final int maxUIReserveNum = 15;
-				ArrayList<View> reservedViews = new ArrayList<View>();
-				ArrayList<View> reservedViewsUI = new ArrayList<View>();
-				for (int i = 0; i < result.size() && i < maxUIReserveNum; i++)
-				{
-					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
-					reservedViews.add(view);
-					reservedViewsUI.add(view);
-				}
-				publishProgress(typeReserveViews, reservedViewsUI);
-
-				for (int i = maxUIReserveNum; i < result.size(); i++)
-				{
-					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
-					reservedViews.add(view);
-					layoutOperator.reserveViewInBackground(view);
-				}
-
-				for (int i = 0; i < result.size(); i++)
-				{
-					final AppInfoItem xxx = result.get(i);
-					final View view = reservedViews.get(i);
-					final CharSequence label = xxx.getLabel();
-					final Drawable icon = xxx.getIcon();
-
-					if (icon != null)
-					{
-						publishProgress(typeSetImage, (ImageView) view.findViewById(R.id.imageView1), icon);
-					}
-
-					if (label != null)
-					{
-						publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText1), label);
-					}
-
-					{
-						publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText2), "" + xxx.getCount());
-					}
-
-					view.setOnClickListener(new OnClickListener()
-					{
-
-						@Override
-						public void onClick(View arg0)
-						{
-							Intent launchIntent = xxx.getLaunchIntent();
-							if (launchIntent != null)
-							{
-								RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(launchIntent
-										.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-							}
-						}
-					});
-
-					view.setOnLongClickListener(new OnLongClickListener()
-					{
-
-						@Override
-						public boolean onLongClick(View arg0)
-						{
-							startManageApp(xxx);
-							return true;
-						}
-
-					});
-
-					appinfoidViewMap.put(xxx.getId(), view);
-
-					publishProgress(typeShowView, view);
-				}
+				showResults(0, maxUIReserveNum);
+				showResults(maxUIReserveNum, result.size());
 
 				for (int i = 0; i < result.size(); i++)
 				{
@@ -268,6 +197,74 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				}
 
 				return null;
+			}
+
+			private void showResults(int startIndexInclude, int endIndexExclude)
+			{
+
+				ArrayList<View> reservedViewsUI = new ArrayList<View>();
+				for (int i = startIndexInclude; i < result.size() && i < endIndexExclude; i++)
+				{
+					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+					reservedViewsUI.add(view);
+				}
+
+				publishProgress(typeReserveViews, reservedViewsUI);
+				for (int i = startIndexInclude; i < result.size() && i < endIndexExclude; i++)
+				{
+					final AppInfoItem xxx = result.get(i);
+					final View view = reservedViewsUI.get(i - startIndexInclude);
+					setupEntryViewDetails(xxx, view);
+				}
+			}
+
+			private void setupEntryViewDetails(final AppInfoItem xxx, final View view)
+			{
+				final CharSequence label = xxx.getLabel();
+				final Drawable icon = xxx.getIcon();
+
+				if (icon != null)
+				{
+					publishProgress(typeSetImage, (ImageView) view.findViewById(R.id.imageView1), icon);
+				}
+
+				if (label != null)
+				{
+					publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText1), label);
+				}
+
+				{
+					publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText2), "" + xxx.getCount());
+				}
+
+				view.setOnClickListener(new OnClickListener()
+				{
+
+					@Override
+					public void onClick(View arg0)
+					{
+						Intent launchIntent = xxx.getLaunchIntent();
+						if (launchIntent != null)
+						{
+							RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(launchIntent
+									.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+						}
+					}
+				});
+
+				view.setOnLongClickListener(new OnLongClickListener()
+				{
+
+					@Override
+					public boolean onLongClick(View arg0)
+					{
+						startManageApp(xxx);
+						return true;
+					}
+
+				});
+
+				appinfoidViewMap.put(xxx.getId(), view);
 			}
 		};
 
@@ -281,8 +278,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
 		{
 			x.executeOnExecutor(x.THREAD_POOL_EXECUTOR);
-		}
-		else
+		} else
 		{
 			x.execute();
 		}
@@ -300,8 +296,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		if (matched)
 		{
 			layoutOperator.showView(view);
-		}
-		else
+		} else
 		{
 			layoutOperator.hideView(view);
 		}

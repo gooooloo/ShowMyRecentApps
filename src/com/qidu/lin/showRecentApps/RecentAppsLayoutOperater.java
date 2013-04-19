@@ -86,12 +86,6 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		}
 	}
 
-	@Override
-	public void reserveViewInBackground(View view)
-	{
-		addViewInfo(view, false);
-	}
-
 	private void addViewInfo(View view, boolean visible)
 	{
 		synchronized (viewInfos)
