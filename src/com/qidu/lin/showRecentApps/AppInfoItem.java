@@ -98,4 +98,9 @@ class AppInfoItem
 		return new Intent(android.provider.Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.fromParts("package", packageName, null))
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	}
+
+	public String getPackageName()
+	{
+		return packageName;
+	}
 }

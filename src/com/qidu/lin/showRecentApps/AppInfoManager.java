@@ -128,6 +128,14 @@ class AppInfoManager
 				{
 					String packageName = eachEntry.getKey();
 
+					if (AppInfoBlackList.hasBlackList(activity))
+					{
+						if (AppInfoBlackList.isInBlackList(packageName))
+						{
+							continue;
+						}
+					}
+
 					// detect whether the package is installed. We dont care
 					// about GIDS actually, but because we dont have directly
 					// api to detect whether a package is installed, so we query
@@ -158,17 +166,25 @@ class AppInfoManager
 				};
 				Collections.sort(statedAppInfoList, comparator);
 
-
-
 				for (PackageInfo xx : pm.getInstalledPackages(0))
 				{
 					String packageName = xx.packageName;
+
+					if (AppInfoBlackList.hasBlackList(activity))
+					{
+						if (AppInfoBlackList.isInBlackList(packageName))
+						{
+							continue;
+						}
+					}
+
 					if (statedAppInfoList.containsThisPackage(packageName))
 					{
 						continue;
 					}
 
-					statedAppInfoList.add(AppInfoItem.makeInstance(packageName, 0));
+					AppInfoItem item = AppInfoItem.makeInstance(packageName, 0);
+					statedAppInfoList.add(item);
 
 				}
 
@@ -178,6 +194,22 @@ class AppInfoManager
 				}
 
 				publishProgress(statedAppInfoList);
+				
+				if (!AppInfoBlackList.hasBlackList(activity))
+				{
+					HashSet<String> blackList = new HashSet<String>();
+
+					for (AppInfoItem each : statedAppInfoList)
+					{
+						if (each.getLaunchIntent() == null)
+						{
+							blackList.add(each.getPackageName());
+						}
+					}
+					
+					AppInfoBlackList.setBlackList(blackList, activity);
+				}
+				
 				return null;
 			}
 
