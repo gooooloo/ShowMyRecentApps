@@ -17,11 +17,34 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg;
 
-public interface SearchResultListener
+import java.util.HashSet;
+import java.util.Set;
+
+public class Utils
 {
 
-	void onSearchResult(AppInfoItem appInfoItem, Boolean matched);
-
+	public static Set<String> product(Set<String> a, Set<String> b)
+	{
+		Set<String> ret = new HashSet<String>();
+		if (a.isEmpty())
+		{
+			for (String bb : b)
+			{
+				ret.add(bb);
+			}
+		}
+		else
+		{
+			for (String aa : a)
+			{
+				for (String bb : b)
+				{
+					ret.add(aa + bb);
+				}
+			}
+		}
+		return ret;
+	}
 }

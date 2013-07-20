@@ -17,7 +17,9 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.appInfo;
+
+import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -25,7 +27,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 
-class AppInfoItem
+public class AppInfoItem
 {
 	final private int cnt;
 	final private String packageName;

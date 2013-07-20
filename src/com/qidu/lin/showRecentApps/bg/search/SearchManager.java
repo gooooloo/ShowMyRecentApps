@@ -17,13 +17,17 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.search;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import android.os.AsyncTask;
 import android.util.Pair;
+
+import com.qidu.lin.showRecentApps.bg.PinYinBridge;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
 
 public class SearchManager
 {

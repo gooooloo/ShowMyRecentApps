@@ -17,7 +17,7 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.appInfo;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -35,7 +35,11 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.os.AsyncTask;
 
-class AppInfoManager
+import com.qidu.lin.showRecentApps.bg.AppStatisticsManager;
+import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
+import com.qidu.lin.showRecentApps.fg.EMPTYActivity;
+
+public class AppInfoManager
 {
 	private static AppInfoManager instance;
 

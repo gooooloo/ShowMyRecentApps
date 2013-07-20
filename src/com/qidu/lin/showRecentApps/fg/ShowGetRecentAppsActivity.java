@@ -17,7 +17,7 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -39,6 +39,11 @@ import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+
+import com.qidu.lin.showRecentApps.R;
+import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
+import com.qidu.lin.showRecentApps.bg.search.SearchManager;
 
 public class ShowGetRecentAppsActivity extends Activity
 {

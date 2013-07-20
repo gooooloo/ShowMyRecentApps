@@ -17,10 +17,23 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.appInfo;
 
+import java.util.ArrayList;
 
-public interface AppInfoRefreshListener
+public class AppInfoList extends ArrayList<AppInfoItem>
 {
-	void onAppInfoRefreshed(AppInfoList result);
+	private static final long serialVersionUID = 3917535715580059359L;
+
+	public boolean containsThisPackage(String packageName)
+	{
+		for (AppInfoItem item : this)
+		{
+			if (item.equalsPackagename(packageName))
+			{
+				return true;
+			}
+		}
+		return false;
+	}
 }

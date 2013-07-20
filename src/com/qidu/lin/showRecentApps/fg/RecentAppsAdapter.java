@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License along with
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fg;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -34,6 +34,13 @@ import android.view.View.OnLongClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.qidu.lin.showRecentApps.R;
+import com.qidu.lin.showRecentApps.bg.PinYinBridge;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoRefreshListener;
+import com.qidu.lin.showRecentApps.bg.search.SearchResultListener;
 
 public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultListener
 {

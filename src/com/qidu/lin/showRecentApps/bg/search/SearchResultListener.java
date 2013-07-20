@@ -17,19 +17,13 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.search;
 
-import java.util.List;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 
-import android.view.View;
-
-interface LayoutOperator
+public interface SearchResultListener
 {
-	void showView(View view);
 
-	void hideView(View view);
+	void onSearchResult(AppInfoItem appInfoItem, Boolean matched);
 
-	View getViewByIndex(int index);
-
-	void reserveViews(List<View> views);
 }

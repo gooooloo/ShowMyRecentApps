@@ -17,10 +17,12 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.appInfo;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.qidu.lin.showRecentApps.fg.ShowGetRecentAppsActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
