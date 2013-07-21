@@ -67,7 +67,11 @@ public class SearchManager
 				
 				String labelString = each.getLabel().toString();
 				boolean matched = match(labelString, params[0]);
+				
+				if (matched)
+				{
 				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
+				}
 				
 				if (xxx.size() >= VirtualAppInfoListUI.getItemCountToShow())
 				{

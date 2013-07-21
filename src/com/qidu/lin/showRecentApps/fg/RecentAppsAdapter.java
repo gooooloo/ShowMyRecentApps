@@ -71,7 +71,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		this.layoutOperator = lo;
 	}
 
-
 	public void refreshWithData(final AppInfoList result)
 	{
 		final int typeSetText = 0;
@@ -108,9 +107,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			@Override
 			protected Void doInBackground(Void... params)
 			{
-				final int maxUIReserveNum = 16;
-				showResults(0, maxUIReserveNum);
-				showResults(maxUIReserveNum, result.size());
+				showResults();
 
 				for (int i = 0; i < result.size(); i++)
 				{
@@ -120,22 +117,28 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				return null;
 			}
 
-			private void showResults(int startIndexInclude, int endIndexExclude)
+			private void showResults()
 			{
 
-				ArrayList<View> reservedViewsUI = new ArrayList<View>();
-				for (int i = startIndexInclude; i < result.size() && i < endIndexExclude; i++)
+				ArrayList<View> viewList = new ArrayList<View>();
+				for (int i = 0; i < result.size(); i++)
 				{
-					View view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
-					reservedViewsUI.add(view);
+					final AppInfoItem item = result.get(i);
+					View view = appinfoidViewMap.get(item.getId());
+					if (view == null)
+					{
+						view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+						appinfoidViewMap.put(item.getId(), view);
+					}
+					viewList.add(view);
 				}
 
-				publishProgress(typeReserveViews, reservedViewsUI);
-				for (int i = startIndexInclude; i < result.size() && i < endIndexExclude; i++)
+				publishProgress(typeReserveViews, viewList);
+				for (int i = 0; i < result.size(); i++)
 				{
-					final AppInfoItem xxx = result.get(i);
-					final View view = reservedViewsUI.get(i - startIndexInclude);
-					setupEntryViewDetails(xxx, view);
+					final AppInfoItem item = result.get(i);
+					final View view = viewList.get(i);
+					setupEntryViewDetails(item, view);
 				}
 			}
 
@@ -185,7 +188,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 				});
 
-				appinfoidViewMap.put(xxx.getId(), view);
 			}
 		};
 
