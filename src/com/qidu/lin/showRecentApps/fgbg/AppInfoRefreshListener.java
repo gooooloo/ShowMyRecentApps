@@ -17,7 +17,9 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps.bg.appInfo;
+package com.qidu.lin.showRecentApps.fgbg;
+
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 
 
 

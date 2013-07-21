@@ -39,8 +39,8 @@ import com.qidu.lin.showRecentApps.R;
 import com.qidu.lin.showRecentApps.bg.PinYinBridge;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
-import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoRefreshListener;
-import com.qidu.lin.showRecentApps.bg.search.SearchResultListener;
+import com.qidu.lin.showRecentApps.fgbg.AppInfoRefreshListener;
+import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 
 public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultListener
 {

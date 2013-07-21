@@ -28,7 +28,8 @@ import android.util.Pair;
 import com.qidu.lin.showRecentApps.bg.PinYinBridge;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
-import com.qidu.lin.showRecentApps.fg.VirtualAppInfoListUI;
+import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
+import com.qidu.lin.showRecentApps.fgbg.VirtualAppInfoListUI;
 
 public class SearchManager
 {

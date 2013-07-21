@@ -38,6 +38,8 @@ import android.os.AsyncTask;
 import com.qidu.lin.showRecentApps.bg.AppStatisticsManager;
 import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
 import com.qidu.lin.showRecentApps.fg.EMPTYActivity;
+import com.qidu.lin.showRecentApps.fgbg.AppInfoRefreshListener;
+import com.qidu.lin.showRecentApps.fgbg.VirtualAppInfoListUI;
 
 public class AppInfoManager
 {
@@ -101,6 +103,7 @@ public class AppInfoManager
 			{
 				AppStatisticsManager appStatMgr = AppStatisticsManager.getInstance(activity);
 
+				// TODO: move this part to AppStatisticsManager.
 				for (RecentTaskInfo each : recentTaskInfo)
 				{
 					Intent intent = each.baseIntent;
@@ -197,8 +200,27 @@ public class AppInfoManager
 					addPackageLabel(each);
 				}
 
-				publishProgress(statedAppInfoList);
-				
+				AppInfoList shownAppInfoList = null;
+				if (statedAppInfoList.size() <= VirtualAppInfoListUI.getItemCountToShow())
+				{
+					shownAppInfoList = statedAppInfoList;
+				}
+				else
+				{
+					shownAppInfoList = new AppInfoList();
+					int cnt = 0;
+					for (AppInfoItem item : statedAppInfoList)
+					{
+						shownAppInfoList.add(item);
+						cnt++;
+						if (cnt >= VirtualAppInfoListUI.getItemCountToShow())
+						{
+							break;
+						}
+					}
+				}
+				publishProgress(shownAppInfoList);
+
 				if (!AppInfoBlackList.hasBlackList(activity))
 				{
 					HashSet<String> blackList = new HashSet<String>();
@@ -210,10 +232,10 @@ public class AppInfoManager
 							blackList.add(each.getPackageName());
 						}
 					}
-					
+
 					AppInfoBlackList.setBlackList(blackList, activity);
 				}
-				
+
 				return null;
 			}
 
