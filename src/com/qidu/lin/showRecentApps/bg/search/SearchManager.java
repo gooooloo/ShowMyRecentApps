@@ -28,6 +28,7 @@ import android.util.Pair;
 import com.qidu.lin.showRecentApps.bg.PinYinBridge;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
+import com.qidu.lin.showRecentApps.fg.VirtualAppInfoListUI;
 
 public class SearchManager
 {
@@ -62,10 +63,15 @@ public class SearchManager
 				{
 					return null;
 				}
-
+				
 				String labelString = each.getLabel().toString();
 				boolean matched = match(labelString, params[0]);
 				xxx.add(new Pair<AppInfoItem, Boolean>(each, matched));
+				
+				if (xxx.size() >= VirtualAppInfoListUI.getItemCountToShow())
+				{
+					break;
+				}
 			}
 			this.publishProgress(xxx);
 			return null;
