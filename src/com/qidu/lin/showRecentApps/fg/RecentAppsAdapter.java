@@ -71,6 +71,11 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		this.layoutOperator = lo;
 	}
 
+	private View inflateEntry(LayoutInflater fi)
+	{
+		return fi.inflate(R.layout.entry, null);
+	}
+
 	public void refreshWithData(final AppInfoList result)
 	{
 		final int typeSetText = 0;
@@ -79,11 +84,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 
 		AsyncTask<Void, Object, Void> x = new AsyncTask<Void, Object, Void>()
 		{
-
-			private View inflateEntry(LayoutInflater fi)
-			{
-				return fi.inflate(R.layout.entry, null);
-			}
 
 			@Override
 			protected void onProgressUpdate(Object... values)
@@ -107,23 +107,10 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			@Override
 			protected Void doInBackground(Void... params)
 			{
-				showResults();
-
-				for (int i = 0; i < result.size(); i++)
-				{
-					PinYinBridge.getHanyuPinyin(result.get(i).getLabel().toString());
-				}
-
-				return null;
-			}
-
-			private void showResults()
-			{
-
 				ArrayList<View> viewList = new ArrayList<View>();
-				for (int i = 0; i < result.size(); i++)
+				for (int i2 = 0; i2 < result.size(); i2++)
 				{
-					final AppInfoItem item = result.get(i);
+					final AppInfoItem item = result.get(i2);
 					View view = appinfoidViewMap.get(item.getId());
 					if (view == null)
 					{
@@ -134,12 +121,19 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				}
 
 				publishProgress(typeReserveViews, viewList);
-				for (int i = 0; i < result.size(); i++)
+				for (int i1 = 0; i1 < result.size(); i1++)
 				{
-					final AppInfoItem item = result.get(i);
-					final View view = viewList.get(i);
+					final AppInfoItem item = result.get(i1);
+					final View view = viewList.get(i1);
 					setupEntryViewDetails(item, view);
 				}
+
+				for (int i = 0; i < result.size(); i++)
+				{
+					PinYinBridge.getHanyuPinyin(result.get(i).getLabel().toString());
+				}
+
+				return null;
 			}
 
 			private void setupEntryViewDetails(final AppInfoItem xxx, final View view)
