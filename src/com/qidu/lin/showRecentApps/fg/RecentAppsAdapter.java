@@ -208,7 +208,11 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		View view = appinfoidViewMap.get(appInfoItem.getId());
 		if (view == null)
 		{
-			return;
+			view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+			appinfoidViewMap.put(appInfoItem.getId(), view);
+			List<View> list = new ArrayList<View>();
+			list.add(view);
+			layoutOperator.reserveViews(list );
 		}
 
 		if (matched)
