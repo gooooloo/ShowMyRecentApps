@@ -76,33 +76,86 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		return fi.inflate(R.layout.entry, null);
 	}
 
+	abstract private class ItemViewSetupAsyncTask extends AsyncTask<Void, Object, Void>
+	{
+
+		final protected int typeSetText = 0;
+		final protected int typeSetImage = 1;
+		final protected int typeReserveViews = 3;
+
+		@Override
+		protected void onProgressUpdate(Object... values)
+		{
+			switch ((Integer) values[0])
+			{
+			case typeSetText:
+				((TextView) values[1]).setText((CharSequence) values[2]);
+				break;
+			case typeSetImage:
+				((ImageView) values[1]).setImageDrawable((Drawable) values[2]);
+				break;
+			case typeReserveViews:
+				layoutOperator.reserveViews((List<View>) values[1]);
+				break;
+			default:
+				// empty
+			}
+		}
+
+		protected void setupEntryViewDetails(final AppInfoItem xxx, final View view)
+		{
+			final CharSequence label = xxx.getLabel();
+			final Drawable icon = xxx.getIcon();
+
+			if (icon != null)
+			{
+				publishProgress(typeSetImage, (ImageView) view.findViewById(R.id.imageView1), icon);
+			}
+
+			if (label != null)
+			{
+				publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText1), label);
+			}
+
+			{
+				publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText2), "" + xxx.getCount());
+			}
+
+			view.setOnClickListener(new OnClickListener()
+			{
+
+				@Override
+				public void onClick(View arg0)
+				{
+					Intent launchIntent = xxx.getLaunchIntent();
+					if (launchIntent != null)
+					{
+						RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(launchIntent
+								.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+					}
+				}
+			});
+
+			view.setOnLongClickListener(new OnLongClickListener()
+			{
+
+				@Override
+				public boolean onLongClick(View arg0)
+				{
+					startManageApp(xxx);
+					return true;
+				}
+
+			});
+
+		}
+	}
+
 	public void refreshWithData(final AppInfoList result)
 	{
-		final int typeSetText = 0;
-		final int typeSetImage = 1;
-		final int typeReserveViews = 3;
 
-		AsyncTask<Void, Object, Void> x = new AsyncTask<Void, Object, Void>()
+		AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
 		{
-
-			@Override
-			protected void onProgressUpdate(Object... values)
-			{
-				switch ((Integer) values[0])
-				{
-				case typeSetText:
-					((TextView) values[1]).setText((CharSequence) values[2]);
-					break;
-				case typeSetImage:
-					((ImageView) values[1]).setImageDrawable((Drawable) values[2]);
-					break;
-				case typeReserveViews:
-					layoutOperator.reserveViews((List<View>) values[1]);
-					break;
-				default:
-					// empty
-				}
-			}
 
 			@Override
 			protected Void doInBackground(Void... params)
@@ -136,53 +189,6 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 				return null;
 			}
 
-			private void setupEntryViewDetails(final AppInfoItem xxx, final View view)
-			{
-				final CharSequence label = xxx.getLabel();
-				final Drawable icon = xxx.getIcon();
-
-				if (icon != null)
-				{
-					publishProgress(typeSetImage, (ImageView) view.findViewById(R.id.imageView1), icon);
-				}
-
-				if (label != null)
-				{
-					publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText1), label);
-				}
-
-				{
-					publishProgress(typeSetText, (TextView) view.findViewById(R.id.editText2), "" + xxx.getCount());
-				}
-
-				view.setOnClickListener(new OnClickListener()
-				{
-
-					@Override
-					public void onClick(View arg0)
-					{
-						Intent launchIntent = xxx.getLaunchIntent();
-						if (launchIntent != null)
-						{
-							RecentAppsAdapter.this.showGetRecentAppsActivity.finishWithIntent(launchIntent
-									.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-						}
-					}
-				});
-
-				view.setOnLongClickListener(new OnLongClickListener()
-				{
-
-					@Override
-					public boolean onLongClick(View arg0)
-					{
-						startManageApp(xxx);
-						return true;
-					}
-
-				});
-
-			}
 		};
 
 		executeRefreshWithDataAsyncTask(x);
@@ -212,7 +218,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			appinfoidViewMap.put(appInfoItem.getId(), view);
 			List<View> list = new ArrayList<View>();
 			list.add(view);
-			layoutOperator.reserveViews(list );
+			layoutOperator.reserveViews(list);
 		}
 
 		if (matched)
