@@ -209,7 +209,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	}
 
 	@Override
-	public void onSearchResult(AppInfoItem appInfoItem, Boolean matched)
+	public void onSearchResult(final AppInfoItem appInfoItem, Boolean matched)
 	{
 		View view = appinfoidViewMap.get(appInfoItem.getId());
 		if (view == null)
@@ -219,6 +219,22 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			List<View> list = new ArrayList<View>();
 			list.add(view);
 			layoutOperator.reserveViews(list);
+
+			final View fv = view;
+			AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
+			{
+
+				@Override
+				protected Void doInBackground(Void... params)
+				{
+					setupEntryViewDetails(appInfoItem, fv);
+
+					return null;
+				}
+
+			};
+
+			executeRefreshWithDataAsyncTask(x);
 		}
 
 		if (matched)
