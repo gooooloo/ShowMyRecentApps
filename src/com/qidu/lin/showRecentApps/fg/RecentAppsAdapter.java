@@ -213,30 +213,13 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	@Override
 	public void onSearchResult(final AppInfoList matchedList)
 	{
-		for (int i = layoutOperator.getViewCount() - 1; i >= 0; i--)
-		{
-			View view = layoutOperator.getViewByIndex(i);
+		hideUnmatched(matchedList);
 
-			boolean stillMatch = false;
-			for (AppInfoItem item : matchedList)
-			{
-				if (appinfoidViewMap.get(item.getId()) == view)
-				{
-					stillMatch = true;
-					break;
-				}
-			}
+		addNewMatched(matchedList);
+	}
 
-			if (stillMatch)
-			{
-				matchedList.remove(view);
-			}
-			else
-			{
-				layoutOperator.hideView(view);
-			}
-		}
-
+	public void addNewMatched(final AppInfoList matchedList)
+	{
 		for (final AppInfoItem appInfoItem : matchedList)
 		{
 			View view = appinfoidViewMap.get(appInfoItem.getId());
@@ -266,6 +249,33 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			}
 
 			layoutOperator.showView(view);
+		}
+	}
+
+	public void hideUnmatched(final AppInfoList matchedList)
+	{
+		for (int i = layoutOperator.getViewCount() - 1; i >= 0; i--)
+		{
+			View view = layoutOperator.getViewByIndex(i);
+
+			boolean stillMatch = false;
+			for (AppInfoItem item : matchedList)
+			{
+				if (appinfoidViewMap.get(item.getId()) == view)
+				{
+					stillMatch = true;
+					break;
+				}
+			}
+
+			if (stillMatch)
+			{
+				matchedList.remove(view);
+			}
+			else
+			{
+				layoutOperator.hideView(view);
+			}
 		}
 	}
 
