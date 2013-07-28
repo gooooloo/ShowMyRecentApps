@@ -216,7 +216,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		for (int i = layoutOperator.getViewCount() - 1; i >= 0; i--)
 		{
 			View view = layoutOperator.getViewByIndex(i);
-			
+
 			boolean stillMatch = false;
 			for (AppInfoItem item : matchedList)
 			{
@@ -226,7 +226,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 					break;
 				}
 			}
-			
+
 			if (stillMatch)
 			{
 				matchedList.remove(view);
@@ -237,38 +237,36 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 			}
 		}
 
-//		for (final AppInfoItem appInfoItem : matchedList)
-//		{
-//			View view = appinfoidViewMap.get(appInfoItem.getId());
-//			if (view == null)
-//			{
-//				view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
-//				appinfoidViewMap.put(appInfoItem.getId(), view);
+		for (final AppInfoItem appInfoItem : matchedList)
+		{
+			View view = appinfoidViewMap.get(appInfoItem.getId());
+			if (view == null)
+			{
+				view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+				appinfoidViewMap.put(appInfoItem.getId(), view);
+				List<View> list = new ArrayList<View>();
+				list.add(view);
+				layoutOperator.reserveViews(list);
 
-//		viewAppInfoIdMap.put(view, appInfoItem.getId());
-//				List<View> list = new ArrayList<View>();
-//				list.add(view);
-//				layoutOperator.reserveViews(list);
-//
-//				final View fv = view;
-//				AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
-//				{
-//
-//					@Override
-//					protected Void doInBackground(Void... params)
-//					{
-//						setupEntryViewDetails(appInfoItem, fv);
-//
-//						return null;
-//					}
-//
-//				};
-//
-//				executeRefreshWithDataAsyncTask(x);
-//			}
-//
-//			layoutOperator.showView(view);
-//		}
+				final View fv = view;
+				AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
+				{
+
+					@Override
+					protected Void doInBackground(Void... params)
+					{
+						setupEntryViewDetails(appInfoItem, fv);
+
+						return null;
+					}
+
+				};
+
+				executeRefreshWithDataAsyncTask(x);
+			}
+
+			layoutOperator.showView(view);
+		}
 	}
 
 	private void startManageApp(AppInfoItem xxx)
