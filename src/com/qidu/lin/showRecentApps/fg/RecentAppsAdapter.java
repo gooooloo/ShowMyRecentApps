@@ -218,7 +218,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		addNewMatched(matchedList);
 	}
 
-	public void addNewMatched(final AppInfoList matchedList)
+	private void addNewMatched(final AppInfoList matchedList)
 	{
 		for (final AppInfoItem appInfoItem : matchedList)
 		{
@@ -252,7 +252,7 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 		}
 	}
 
-	public void hideUnmatched(final AppInfoList matchedList)
+	private void hideUnmatched(final AppInfoList matchedList)
 	{
 		for (int i = layoutOperator.getViewCount() - 1; i >= 0; i--)
 		{
