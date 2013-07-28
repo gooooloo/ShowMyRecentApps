@@ -123,4 +123,10 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		return parentLayout.getChildAt(index);
 	}
 
+	@Override
+	public int getViewCount()
+	{
+		return parentLayout.getChildCount();
+	}
+
 }

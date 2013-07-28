@@ -19,11 +19,11 @@
 
 package com.qidu.lin.showRecentApps.fgbg;
 
-import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 
 public interface SearchResultListener
 {
 
-	void onSearchResult(AppInfoItem appInfoItem, Boolean matched);
+	void onSearchResult(AppInfoList list);
 
 }

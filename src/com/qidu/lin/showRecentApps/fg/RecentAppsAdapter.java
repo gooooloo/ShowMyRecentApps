@@ -19,9 +19,11 @@
 package com.qidu.lin.showRecentApps.fg;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -209,42 +211,64 @@ public class RecentAppsAdapter implements AppInfoRefreshListener, SearchResultLi
 	}
 
 	@Override
-	public void onSearchResult(final AppInfoItem appInfoItem, Boolean matched)
+	public void onSearchResult(final AppInfoList matchedList)
 	{
-		View view = appinfoidViewMap.get(appInfoItem.getId());
-		if (view == null)
+		for (int i = layoutOperator.getViewCount() - 1; i >= 0; i--)
 		{
-			view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
-			appinfoidViewMap.put(appInfoItem.getId(), view);
-			List<View> list = new ArrayList<View>();
-			list.add(view);
-			layoutOperator.reserveViews(list);
-
-			final View fv = view;
-			AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
+			View view = layoutOperator.getViewByIndex(i);
+			
+			boolean stillMatch = false;
+			for (AppInfoItem item : matchedList)
 			{
-
-				@Override
-				protected Void doInBackground(Void... params)
+				if (appinfoidViewMap.get(item.getId()) == view)
 				{
-					setupEntryViewDetails(appInfoItem, fv);
-
-					return null;
+					stillMatch = true;
+					break;
 				}
-
-			};
-
-			executeRefreshWithDataAsyncTask(x);
+			}
+			
+			if (stillMatch)
+			{
+				matchedList.remove(view);
+			}
+			else
+			{
+				layoutOperator.hideView(view);
+			}
 		}
 
-		if (matched)
-		{
-			layoutOperator.showView(view);
-		}
-		else
-		{
-			layoutOperator.hideView(view);
-		}
+//		for (final AppInfoItem appInfoItem : matchedList)
+//		{
+//			View view = appinfoidViewMap.get(appInfoItem.getId());
+//			if (view == null)
+//			{
+//				view = inflateEntry(showGetRecentAppsActivity.getLayoutInflater());
+//				appinfoidViewMap.put(appInfoItem.getId(), view);
+
+//		viewAppInfoIdMap.put(view, appInfoItem.getId());
+//				List<View> list = new ArrayList<View>();
+//				list.add(view);
+//				layoutOperator.reserveViews(list);
+//
+//				final View fv = view;
+//				AsyncTask<Void, Object, Void> x = new ItemViewSetupAsyncTask()
+//				{
+//
+//					@Override
+//					protected Void doInBackground(Void... params)
+//					{
+//						setupEntryViewDetails(appInfoItem, fv);
+//
+//						return null;
+//					}
+//
+//				};
+//
+//				executeRefreshWithDataAsyncTask(x);
+//			}
+//
+//			layoutOperator.showView(view);
+//		}
 	}
 
 	private void startManageApp(AppInfoItem xxx)

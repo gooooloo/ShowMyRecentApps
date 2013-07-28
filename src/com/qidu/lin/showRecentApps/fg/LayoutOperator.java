@@ -30,6 +30,8 @@ interface LayoutOperator
 	void hideView(View view);
 
 	View getViewByIndex(int index);
+	
+	int getViewCount();
 
 	void reserveViews(List<View> views);
 }

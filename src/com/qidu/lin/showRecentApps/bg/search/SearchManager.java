@@ -24,6 +24,7 @@ import android.util.Pair;
 
 import com.qidu.lin.showRecentApps.bg.PinYinBridge;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
 import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 import com.qidu.lin.showRecentApps.fgbg.VirtualAppInfoListUI;
@@ -48,13 +49,13 @@ public class SearchManager
 		return instance;
 	}
 
-	class SearchAsyncTask extends AsyncTask<String, Pair<AppInfoItem, Boolean>, Void>
+	class SearchAsyncTask extends AsyncTask<String, AppInfoList, Void>
 	{
 		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(String... params)
 		{
-			int matchCnt = 0;
+			AppInfoList matchedList = new AppInfoList();
 			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
 			{
 				if (this.isCancelled())
@@ -63,36 +64,37 @@ public class SearchManager
 				}
 
 				String labelString = each.getLabel().toString();
+				
 				boolean matched = match(labelString, params[0]);
 
 				if (matched)
 				{
-					matchCnt++;
+					matchedList.add(each);
 				}
 
-				this.publishProgress(new Pair<AppInfoItem, Boolean>(each, matched));
-				if (matchCnt >= VirtualAppInfoListUI.getItemCountToShow())
+				if (matchedList.size() >= VirtualAppInfoListUI.getItemCountToShow())
 				{
 					break;
 				}
 			}
+			this.publishProgress(matchedList);
 			return null;
 		}
 
 		@Override
-		protected void onProgressUpdate(Pair<AppInfoItem, Boolean>... values)
+		protected void onProgressUpdate(AppInfoList... values)
 		{
 			if (resultListner == null)
 			{
 				return;
 			}
-			for (Pair<AppInfoItem, Boolean> each : values)
+			for (AppInfoList each : values)
 			{
 				if (this.isCancelled())
 				{
 					return;
 				}
-				resultListner.onSearchResult(each.first, each.second);
+				resultListner.onSearchResult(each);
 			}
 		}
 
