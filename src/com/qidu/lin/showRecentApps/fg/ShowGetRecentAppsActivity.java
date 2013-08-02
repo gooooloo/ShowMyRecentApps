@@ -30,6 +30,8 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -49,6 +51,9 @@ public class ShowGetRecentAppsActivity extends Activity
 {
 	private static final float esp = 100;
 	private Float lastY;
+
+	private Runnable searchRunnable = null;
+	private Handler searchHandler = new Handler(Looper.getMainLooper());
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev)
@@ -116,14 +121,28 @@ public class ShowGetRecentAppsActivity extends Activity
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
+			public void afterTextChanged(final Editable s)
 			{
 				if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
 				{
 					setLayoutAnimationForHoneycomb(vv);
 				}
 
-				SearchManager.getInstance().onSearch(s.toString());
+				if (searchRunnable != null)
+				{
+					searchHandler.removeCallbacks(searchRunnable);
+					searchRunnable = null;
+				}
+				searchRunnable = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						SearchManager.getInstance().onSearch(s.toString());
+						searchRunnable = null;
+					}
+				};
+				searchHandler.postDelayed(searchRunnable, 500);
 			}
 		});
 
@@ -264,6 +283,11 @@ public class ShowGetRecentAppsActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
+		if (searchRunnable != null)
+		{
+			searchHandler.removeCallbacks(searchRunnable);
+			searchRunnable = null;
+		}
 		SearchManager.getInstance().setSearchResultListener(null);
 		AppInfoManager.getInstance().deleteListener(adapter);
 		super.onDestroy();
