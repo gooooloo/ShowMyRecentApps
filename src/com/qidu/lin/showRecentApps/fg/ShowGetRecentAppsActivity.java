@@ -142,7 +142,7 @@ public class ShowGetRecentAppsActivity extends Activity
 						searchRunnable = null;
 					}
 				};
-				searchHandler.postDelayed(searchRunnable, 500);
+				searchHandler.postDelayed(searchRunnable, 300);
 			}
 		});
 
