@@ -19,8 +19,9 @@
 
 package com.qidu.lin.showRecentApps.bg.search;
 
+import java.util.Locale;
+
 import android.os.AsyncTask;
-import android.util.Pair;
 
 import com.qidu.lin.showRecentApps.bg.PinYinBridge;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
@@ -117,8 +118,8 @@ public class SearchManager
 
 		private boolean doSimpleMatch(String packageName, String string)
 		{
-			char[] aaa = packageName.toLowerCase().toCharArray();
-			char[] bbb = string.toLowerCase().toCharArray();
+			char[] aaa = packageName.toLowerCase(Locale.getDefault()).toCharArray();
+			char[] bbb = string.toLowerCase(Locale.getDefault()).toCharArray();
 
 			int iaaa = 0;
 			int ibbb = 0;

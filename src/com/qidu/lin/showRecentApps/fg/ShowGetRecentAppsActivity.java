@@ -133,16 +133,24 @@ public class ShowGetRecentAppsActivity extends Activity
 					searchHandler.removeCallbacks(searchRunnable);
 					searchRunnable = null;
 				}
+				final String searchkey = s.toString();
 				searchRunnable = new Runnable()
 				{
 					@Override
 					public void run()
 					{
-						SearchManager.getInstance().onSearch(s.toString());
+						SearchManager.getInstance().onSearch(searchkey);
 						searchRunnable = null;
 					}
 				};
+				if (searchkey.length() < 3)
+				{
 				searchHandler.postDelayed(searchRunnable, 300);
+				}
+				else
+				{
+					searchRunnable.run();
+				}
 			}
 		});
 
