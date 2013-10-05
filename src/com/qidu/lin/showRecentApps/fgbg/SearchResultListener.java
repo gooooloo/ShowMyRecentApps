@@ -17,21 +17,13 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fgbg;
 
-import android.content.pm.PackageManager;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 
-public class PackageManagerCache
+public interface SearchResultListener
 {
-	static private PackageManager pm;
 
-	public static void setPm(PackageManager pm)
-	{
-		PackageManagerCache.pm = pm;
-	}
+	void onSearchResult(AppInfoList list);
 
-	public static PackageManager getPm()
-	{
-		return pm;
-	}
 }

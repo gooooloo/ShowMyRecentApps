@@ -17,14 +17,16 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg;
 
 import java.util.Map;
+
+import com.qidu.lin.showRecentApps.fg.ShowGetRecentAppsActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
 
-class AppStatisticsManager
+public class AppStatisticsManager
 {
 	final static String KEY = "DF";
 	private static Map<String, Integer> map = null;

@@ -17,12 +17,13 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
 
 import net.sourceforge.pinyin4j.PinyinHelper;
 import net.sourceforge.pinyin4j.format.HanyuPinyinCaseType;

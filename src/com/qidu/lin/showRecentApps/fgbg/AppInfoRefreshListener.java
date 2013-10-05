@@ -1,5 +1,4 @@
-<!-- 
- /*
+/*
  * Copyright 2013 Qidu Lin
  * 
  * This file is part of ShowMyRecentApps.
@@ -17,18 +16,15 @@
  * You should have received a copy of the GNU General Public License along with
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
- -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+package com.qidu.lin.showRecentApps.fgbg;
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        tools:context=".EMPTYActivity" />
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 
-</RelativeLayout>
+
+
+
+public interface AppInfoRefreshListener
+{
+	void onAppInfoRefreshed(AppInfoList result);
+}

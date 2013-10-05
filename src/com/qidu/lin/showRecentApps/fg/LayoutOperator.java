@@ -17,10 +17,21 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fg;
 
+import java.util.List;
 
-public interface AppInfoRefreshListener
+import android.view.View;
+
+interface LayoutOperator
 {
-	void onAppInfoRefreshed(AppInfoList result);
+	void showView(View view);
+
+	void hideView(View view);
+
+	View getViewByIndex(int index);
+	
+	int getViewCount();
+
+	void reserveViews(List<View> views);
 }

@@ -17,11 +17,12 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fg;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 
 import android.util.Pair;
 import android.view.View;
@@ -120,6 +121,12 @@ class RecentAppsLayoutOperater implements LayoutOperator
 		}
 
 		return parentLayout.getChildAt(index);
+	}
+
+	@Override
+	public int getViewCount()
+	{
+		return parentLayout.getChildCount();
 	}
 
 }

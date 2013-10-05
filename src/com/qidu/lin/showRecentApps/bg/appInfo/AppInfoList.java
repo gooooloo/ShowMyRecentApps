@@ -17,7 +17,7 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.bg.appInfo;
 
 import java.util.ArrayList;
 

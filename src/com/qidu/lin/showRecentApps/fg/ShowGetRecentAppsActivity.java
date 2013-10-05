@@ -17,7 +17,7 @@
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.qidu.lin.showRecentApps;
+package com.qidu.lin.showRecentApps.fg;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -30,6 +30,8 @@ import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
@@ -40,10 +42,18 @@ import android.view.Window;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 
+import com.qidu.lin.showRecentApps.R;
+import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
+import com.qidu.lin.showRecentApps.bg.search.SearchManager;
+
 public class ShowGetRecentAppsActivity extends Activity
 {
 	private static final float esp = 100;
 	private Float lastY;
+
+	private Runnable searchRunnable = null;
+	private Handler searchHandler = new Handler(Looper.getMainLooper());
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev)
@@ -111,14 +121,36 @@ public class ShowGetRecentAppsActivity extends Activity
 			}
 
 			@Override
-			public void afterTextChanged(Editable s)
+			public void afterTextChanged(final Editable s)
 			{
 				if (android.os.Build.VERSION.SDK_INT > android.os.Build.VERSION_CODES.HONEYCOMB)
 				{
 					setLayoutAnimationForHoneycomb(vv);
 				}
 
-				SearchManager.getInstance().onSearch(s.toString());
+				if (searchRunnable != null)
+				{
+					searchHandler.removeCallbacks(searchRunnable);
+					searchRunnable = null;
+				}
+				final String searchkey = s.toString();
+				searchRunnable = new Runnable()
+				{
+					@Override
+					public void run()
+					{
+						SearchManager.getInstance().onSearch(searchkey);
+						searchRunnable = null;
+					}
+				};
+				if (searchkey.length() < 3)
+				{
+				searchHandler.postDelayed(searchRunnable, 300);
+				}
+				else
+				{
+					searchRunnable.run();
+				}
 			}
 		});
 
@@ -259,6 +291,11 @@ public class ShowGetRecentAppsActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
+		if (searchRunnable != null)
+		{
+			searchHandler.removeCallbacks(searchRunnable);
+			searchRunnable = null;
+		}
 		SearchManager.getInstance().setSearchResultListener(null);
 		AppInfoManager.getInstance().deleteListener(adapter);
 		super.onDestroy();
