@@ -21,7 +21,7 @@ package com.qidu.lin.showRecentApps.bg;
 
 import java.util.Map;
 
-import com.qidu.lin.showRecentApps.fg.ShowGetRecentAppsActivity;
+import com.qidu.lin.showRecentApps.fg.RecentAppsActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -64,7 +64,7 @@ public class AppStatisticsManager
 
 	private SharedPreferences getSp()
 	{
-		return context.getSharedPreferences(KEY, ShowGetRecentAppsActivity.MODE_PRIVATE);
+		return context.getSharedPreferences(KEY, RecentAppsActivity.MODE_PRIVATE);
 	}
 
 	private void setCount(String className, int count)

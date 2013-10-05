@@ -22,7 +22,7 @@ package com.qidu.lin.showRecentApps.bg.appInfo;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.qidu.lin.showRecentApps.fg.ShowGetRecentAppsActivity;
+import com.qidu.lin.showRecentApps.fg.RecentAppsActivity;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -55,7 +55,7 @@ public class AppInfoBlackList
 
 	private static SharedPreferences getSp(Context context)
 	{
-		return context.getSharedPreferences("blacklist", ShowGetRecentAppsActivity.MODE_PRIVATE);
+		return context.getSharedPreferences("blacklist", RecentAppsActivity.MODE_PRIVATE);
 	}
 
 	public static boolean isInBlackList(String packageName)

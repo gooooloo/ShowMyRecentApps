@@ -4,7 +4,7 @@
     android:versionName="1.2" >
 
     <uses-sdk
-        android:minSdkVersion="9"
+        android:minSdkVersion="14"
         android:targetSdkVersion="15" />
 
     <uses-permission android:name="android.permission.GET_TASKS" />
@@ -15,7 +15,7 @@
         android:allowBackup="true"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.qidu.lin.showRecentApps.fg.ShowGetRecentAppsActivity"
+            android:name="com.qidu.lin.showRecentApps.fg.RecentAppsActivity"
             android:excludeFromRecents="true"
             android:label="@string/title_activity_test_get_recent_apps"
             android:theme="@style/mydialogactivity"

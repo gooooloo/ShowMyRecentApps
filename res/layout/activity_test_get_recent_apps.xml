@@ -1,4 +1,4 @@
-<!-- 
+<!--
  /*
  * Copyright 2013 Qidu Lin
  * 
@@ -17,12 +17,11 @@
  * You should have received a copy of the GNU General Public License along with
  * ShowMyRecentApps. If not, see <http://www.gnu.org/licenses/>.
  */
- -->
+-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/root"
-    xmlns:app="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
     android:layout_width="320dp"
     android:layout_height="400dp" >
 
@@ -49,18 +48,14 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/searchView1" >
 
-        <com.gridlayout.GridLayout
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:gridlayout="http://schemas.android.com/apk/res/com.qidu.lin.showRecentApps"
+        <GridView
             android:id="@+id/gridView1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:horizontalSpacing="10dp"
             android:numColumns="4"
             android:paddingTop="30dp"
-            android:verticalSpacing="20dp"
-            gridlayout:columnCount="4" >
-        </com.gridlayout.GridLayout>
+            android:verticalSpacing="20dp" />
     </ScrollView>
 
 </RelativeLayout>
