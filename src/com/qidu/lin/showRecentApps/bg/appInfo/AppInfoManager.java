@@ -126,6 +126,13 @@ public class AppInfoManager
 				}
 				publishProgress(shownAppInfoList);
 
+				updateBlackListIfNeeded(activity, statedAppInfoList);
+
+				return null;
+			}
+
+			private void updateBlackListIfNeeded(final Activity activity, AppInfoList statedAppInfoList)
+			{
 				if (!AppInfoBlackList.hasBlackList(activity))
 				{
 					HashSet<String> blackList = new HashSet<String>();
@@ -140,8 +147,6 @@ public class AppInfoManager
 
 					AppInfoBlackList.setBlackList(blackList, activity);
 				}
-
-				return null;
 			}
 
 			private AppInfoList generateStatedAppInfoList(final Activity activity)
