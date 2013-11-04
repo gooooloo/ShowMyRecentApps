@@ -103,6 +103,49 @@ public class AppInfoManager
 			{
 				updateAppUsedCount(activity);
 
+				AppInfoList statedAppInfoList = generateStatedAppInfoList(activity);
+
+				AppInfoList shownAppInfoList = null;
+				if (statedAppInfoList.size() <= VirtualAppInfoListUI.getItemCountToShow())
+				{
+					shownAppInfoList = statedAppInfoList;
+				}
+				else
+				{
+					shownAppInfoList = new AppInfoList();
+					int cnt = 0;
+					for (AppInfoItem item : statedAppInfoList)
+					{
+						shownAppInfoList.add(item);
+						cnt++;
+						if (cnt >= VirtualAppInfoListUI.getItemCountToShow())
+						{
+							break;
+						}
+					}
+				}
+				publishProgress(shownAppInfoList);
+
+				if (!AppInfoBlackList.hasBlackList(activity))
+				{
+					HashSet<String> blackList = new HashSet<String>();
+
+					for (AppInfoItem each : statedAppInfoList)
+					{
+						if (each.getLaunchIntent() == null)
+						{
+							blackList.add(each.getPackageName());
+						}
+					}
+
+					AppInfoBlackList.setBlackList(blackList, activity);
+				}
+
+				return null;
+			}
+
+			private AppInfoList generateStatedAppInfoList(final Activity activity)
+			{
 				AppStatisticsManager appStatMgr = AppStatisticsManager.getInstance(activity);
 				AppInfoList statedAppInfoList = new AppInfoList();
 				PackageManager pm = PackageManagerCache.getPm();
@@ -174,44 +217,7 @@ public class AppInfoManager
 				{
 					addPackageLabel(each);
 				}
-
-				AppInfoList shownAppInfoList = null;
-				if (statedAppInfoList.size() <= VirtualAppInfoListUI.getItemCountToShow())
-				{
-					shownAppInfoList = statedAppInfoList;
-				}
-				else
-				{
-					shownAppInfoList = new AppInfoList();
-					int cnt = 0;
-					for (AppInfoItem item : statedAppInfoList)
-					{
-						shownAppInfoList.add(item);
-						cnt++;
-						if (cnt >= VirtualAppInfoListUI.getItemCountToShow())
-						{
-							break;
-						}
-					}
-				}
-				publishProgress(shownAppInfoList);
-
-				if (!AppInfoBlackList.hasBlackList(activity))
-				{
-					HashSet<String> blackList = new HashSet<String>();
-
-					for (AppInfoItem each : statedAppInfoList)
-					{
-						if (each.getLaunchIntent() == null)
-						{
-							blackList.add(each.getPackageName());
-						}
-					}
-
-					AppInfoBlackList.setBlackList(blackList, activity);
-				}
-
-				return null;
+				return statedAppInfoList;
 			}
 
 			private AppStatisticsManager updateAppUsedCount(final Activity activity)
