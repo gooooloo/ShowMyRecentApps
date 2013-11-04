@@ -101,34 +101,9 @@ public class AppInfoManager
 			@Override
 			protected Void doInBackground(Void... arg0)
 			{
+				updateAppUsedCount(activity);
+
 				AppStatisticsManager appStatMgr = AppStatisticsManager.getInstance(activity);
-
-				// TODO: move this part to AppStatisticsManager.
-				for (RecentTaskInfo each : recentTaskInfo)
-				{
-					Intent intent = each.baseIntent;
-					if (intent == null)
-					{
-						continue;
-					}
-
-					String className = intent.getComponent().getClassName();
-
-					if (className.equalsIgnoreCase(EMPTYActivity.class.getName()))
-					{
-						break;
-					}
-
-					String packageName = intent.getComponent().getPackageName();
-
-					if (packageName == null || packageName.equalsIgnoreCase(activity.getPackageName()))
-					{
-						continue;
-					}
-
-					appStatMgr.AddAppUsdCountByOne(packageName);
-				}
-
 				AppInfoList statedAppInfoList = new AppInfoList();
 				PackageManager pm = PackageManagerCache.getPm();
 				for (Map.Entry<String, Integer> eachEntry : appStatMgr.getAll().entrySet())
@@ -237,6 +212,38 @@ public class AppInfoManager
 				}
 
 				return null;
+			}
+
+			private AppStatisticsManager updateAppUsedCount(final Activity activity)
+			{
+				AppStatisticsManager appStatMgr = AppStatisticsManager.getInstance(activity);
+
+				// TODO: move this part to AppStatisticsManager.
+				for (RecentTaskInfo each : recentTaskInfo)
+				{
+					Intent intent = each.baseIntent;
+					if (intent == null)
+					{
+						continue;
+					}
+
+					String className = intent.getComponent().getClassName();
+
+					if (className.equalsIgnoreCase(EMPTYActivity.class.getName()))
+					{
+						break;
+					}
+
+					String packageName = intent.getComponent().getPackageName();
+
+					if (packageName == null || packageName.equalsIgnoreCase(activity.getPackageName()))
+					{
+						continue;
+					}
+
+					appStatMgr.AddAppUsdCountByOne(packageName);
+				}
+				return appStatMgr;
 			}
 
 			@Override
