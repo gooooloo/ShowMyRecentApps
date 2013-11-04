@@ -37,7 +37,7 @@ import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 
 public class RecentAppsAdapter implements ListAdapter, AppInfoRefreshListener, SearchResultListener
 {
-	private AppInfoList appInfoList;
+	private AppInfoList appInfoList = new AppInfoList();
 	private final RecentAppsActivity recentAppsActivity;
 	
 	public RecentAppsAdapter(RecentAppsActivity recentAppsActivity)
