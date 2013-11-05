@@ -24,8 +24,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -35,11 +35,11 @@ import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 import com.qidu.lin.showRecentApps.fgbg.AppInfoRefreshListener;
 import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 
-public class RecentAppsAdapter implements ListAdapter, AppInfoRefreshListener, SearchResultListener
+public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshListener, SearchResultListener
 {
 	private AppInfoList appInfoList = new AppInfoList();
 	private final RecentAppsActivity recentAppsActivity;
-	
+
 	public RecentAppsAdapter(RecentAppsActivity recentAppsActivity)
 	{
 		this.recentAppsActivity = recentAppsActivity;
@@ -161,15 +161,9 @@ public class RecentAppsAdapter implements ListAdapter, AppInfoRefreshListener, S
 
 	public void refreshWithData(final AppInfoList result)
 	{
-		this.appInfoList = result;
-		
-	}
-
-	@Override
-	public void registerDataSetObserver(DataSetObserver observer)
-	{
-		// TODO Auto-generated method stub
-
+		this.appInfoList.clear();
+		this.appInfoList.addAll(result);
+		this.notifyDataSetChanged();
 	}
 
 	private void startManageApp(AppInfoItem xxx)
@@ -181,13 +175,6 @@ public class RecentAppsAdapter implements ListAdapter, AppInfoRefreshListener, S
 			recentAppsActivity.startActivity(intentToManageApp);
 			recentAppsActivity.finish();
 		}
-
-	}
-
-	@Override
-	public void unregisterDataSetObserver(DataSetObserver observer)
-	{
-		// TODO Auto-generated method stub
 
 	}
 }

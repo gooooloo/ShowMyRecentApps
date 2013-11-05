@@ -124,7 +124,7 @@ public class AppInfoManager
 						}
 					}
 				}
-				publishProgress(shownAppInfoList);
+				publishProgress(statedAppInfoList);
 
 				updateBlackListIfNeeded(activity, statedAppInfoList);
 
