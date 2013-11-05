@@ -42,20 +42,14 @@
         android:inputType="textVisiblePassword" >
     </EditText>
 
-    <ScrollView
-        android:id="@+id/scrollView1"
+    <GridView
+        android:id="@+id/gridView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/searchView1" >
-
-        <GridView
-            android:id="@+id/gridView1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:horizontalSpacing="10dp"
-            android:numColumns="4"
-            android:paddingTop="30dp"
-            android:verticalSpacing="20dp" />
-    </ScrollView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/searchView1"
+        android:horizontalSpacing="10dp"
+        android:numColumns="4"
+        android:paddingTop="30dp"
+        android:verticalSpacing="20dp" />
 
 </RelativeLayout>

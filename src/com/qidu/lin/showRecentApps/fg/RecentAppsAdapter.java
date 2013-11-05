@@ -87,7 +87,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 
 		((ImageView) convertView.findViewById(R.id.imageView1)).setImageDrawable(item.getIcon());
 		((TextView) convertView.findViewById(R.id.editText1)).setText(item.getLabel());
-		((TextView) convertView.findViewById(R.id.editText2)).setText(item.getCount());
+		((TextView) convertView.findViewById(R.id.editText2)).setText("" + item.getCount());
 
 		convertView.setOnClickListener(new OnClickListener()
 		{

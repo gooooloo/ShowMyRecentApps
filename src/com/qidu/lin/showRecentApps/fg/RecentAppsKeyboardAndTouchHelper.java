@@ -53,7 +53,7 @@ public class RecentAppsKeyboardAndTouchHelper
 	{
 		if (ev.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			if (findViewById(R.id.scrollView1).getScrollY() == 0)
+			if (findViewById(R.id.gridView1).getScrollY() == 0)
 			{
 				lastY = ev.getRawY();
 			}
