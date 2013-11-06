@@ -25,6 +25,7 @@ import android.view.View;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.GridView;
 
 import com.qidu.lin.showRecentApps.R;
 
@@ -53,7 +54,8 @@ public class RecentAppsKeyboardAndTouchHelper
 	{
 		if (ev.getAction() == MotionEvent.ACTION_DOWN)
 		{
-			if (findViewById(R.id.gridView1).getScrollY() == 0)
+			final GridView gridView = (GridView) findViewById(R.id.gridView1);
+			if (gridView.getFirstVisiblePosition() == 0)
 			{
 				lastY = ev.getRawY();
 			}
