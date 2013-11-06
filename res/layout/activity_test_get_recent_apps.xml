@@ -47,9 +47,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/searchView1"
-        android:horizontalSpacing="10dp"
         android:numColumns="4"
-        android:paddingTop="30dp"
-        android:verticalSpacing="20dp" />
+        android:paddingTop="30dp" />
 
 </RelativeLayout>
