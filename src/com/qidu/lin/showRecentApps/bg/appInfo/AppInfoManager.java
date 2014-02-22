@@ -54,6 +54,14 @@ public class AppInfoManager
 			packageLabels.add(appInfo);
 		}
 	}
+	
+	public void clearPackageLabel()
+	{
+		synchronized (packageLabels)
+		{
+			packageLabels.clear();
+		}
+	}
 
 	public AppInfoList getAppInfoList()
 	{
@@ -218,6 +226,7 @@ public class AppInfoManager
 
 				}
 
+				clearPackageLabel();
 				for (AppInfoItem each : statedAppInfoList)
 				{
 					addPackageLabel(each);
