@@ -36,12 +36,19 @@ import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 
 public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshListener, SearchResultListener
 {
+	private final static int countMax = 16;
+	private static View[] viewpool = new View[countMax];
 	private AppInfoList appInfoList = new AppInfoList();
 	private final RecentAppsActivity recentAppsActivity;
 
 	public RecentAppsAdapter(RecentAppsActivity recentAppsActivity)
 	{
 		this.recentAppsActivity = recentAppsActivity;
+
+		for (int i = 0; i < countMax; i++)
+		{
+			viewpool[i] = recentAppsActivity.getLayoutInflater().inflate(R.layout.entry, null);
+		}
 	}
 
 	@Override
@@ -53,7 +60,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 	@Override
 	public int getCount()
 	{
-		return appInfoList.size();
+		return Math.min(countMax, appInfoList.size());
 	}
 
 	@Override
@@ -77,10 +84,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent)
 	{
-		if (convertView == null)
-		{
-			convertView = recentAppsActivity.getLayoutInflater().inflate(R.layout.entry, null);
-		}
+		convertView = viewpool[position];
 
 		final AppInfoItem item = (AppInfoItem) this.getItem(position);
 
