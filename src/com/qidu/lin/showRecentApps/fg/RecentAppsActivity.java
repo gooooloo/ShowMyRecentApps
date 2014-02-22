@@ -63,6 +63,8 @@ public class RecentAppsActivity extends Activity
 			@Override
 			public void afterTextChanged(final Editable s)
 			{
+				// TODO: can this be simplified as
+				// "SearchManager.getInstance().onSearch(s.toString());"?
 				if (searchRunnable != null)
 				{
 					searchHandler.removeCallbacks(searchRunnable);
@@ -78,14 +80,7 @@ public class RecentAppsActivity extends Activity
 						searchRunnable = null;
 					}
 				};
-				if (searchkey.length() < 3)
-				{
-					searchHandler.postDelayed(searchRunnable, 300);
-				}
-				else
-				{
-					searchRunnable.run();
-				}
+				searchRunnable.run();
 			}
 
 			@Override
