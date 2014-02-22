@@ -41,7 +41,7 @@
         android:layout_alignParentRight="true"
         android:layout_below="@id/dummy"
         android:enabled="false"
-        android:hint="12" />
+        android:focusable="false" />
 
     <EditText
         android:id="@+id/searchView1"
