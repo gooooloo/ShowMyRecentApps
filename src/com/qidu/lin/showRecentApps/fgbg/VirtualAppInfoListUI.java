@@ -23,6 +23,7 @@ public class VirtualAppInfoListUI
 {
 	public static int getItemCountToShow()
 	{
-		return 12;
+		// TODO: remove this?
+		return 1200;
 	}
 }
