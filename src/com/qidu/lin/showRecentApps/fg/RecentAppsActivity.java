@@ -33,8 +33,10 @@ import android.widget.GridView;
 
 import com.qidu.lin.showRecentApps.R;
 import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
 import com.qidu.lin.showRecentApps.bg.search.SearchManager;
+import com.qidu.lin.showRecentApps.fg.RecentAppsAdapter.Decorater;
 
 public class RecentAppsActivity extends Activity
 {
@@ -110,6 +112,14 @@ public class RecentAppsActivity extends Activity
 
 		adapter = new RecentAppsAdapter(this);
 		((GridView) findViewById(R.id.gridView1)).setAdapter(adapter);
+		adapter.setDecorater(new RecentAppsAdapter.Decorater()
+		{
+			@Override
+			public void decorate(AppInfoList appInfoList)
+			{
+				((EditText) RecentAppsActivity.this.findViewById(R.id.appCnt)).setHint("" + appInfoList.size());
+			}
+		});
 
 		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(getSearchTextWatcher());
 

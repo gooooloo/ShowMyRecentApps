@@ -36,10 +36,16 @@ import com.qidu.lin.showRecentApps.fgbg.SearchResultListener;
 
 public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshListener, SearchResultListener
 {
+	public static abstract class Decorater
+	{
+		public abstract void decorate(AppInfoList appInfoList);
+	}
+	
 	private final static int countMax = 16;
 	private static View[] viewpool = new View[countMax];
 	private AppInfoList appInfoList = new AppInfoList();
 	private final RecentAppsActivity recentAppsActivity;
+	private Decorater decorater;
 
 	public RecentAppsAdapter(RecentAppsActivity recentAppsActivity)
 	{
@@ -49,6 +55,11 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 		{
 			viewpool[i] = recentAppsActivity.getLayoutInflater().inflate(R.layout.entry, null);
 		}
+	}
+	
+	public void setDecorater(Decorater decorater)
+	{
+		this.decorater = decorater;
 	}
 
 	@Override
@@ -167,6 +178,12 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 		this.appInfoList.clear();
 		this.appInfoList.addAll(result);
 		this.notifyDataSetChanged();
+		
+		// we also afford a chance to decorate to outside of this adapter.
+		if (decorater != null)
+		{
+			decorater.decorate(result);
+		}
 	}
 
 	private void startManageApp(AppInfoItem xxx)
