@@ -32,6 +32,11 @@ import com.qidu.lin.showRecentApps.fgbg.VirtualAppInfoListUI;
 
 public class SearchManager
 {
+	private enum SearchLevel
+	{
+		loosely, strictly
+	}
+
 	private SearchResultListener resultListner = null;
 
 	private SearchManager()
@@ -63,11 +68,36 @@ public class SearchManager
 					return null;
 				}
 
-				String labelString = each.getLabel().toString();
-				
-				boolean matched = match(labelString, params[0]);
+				if (match(each.getLabel().toString(), params[0], SearchLevel.strictly))
+				{
+					matchedList.add(each);
+				}
 
-				if (matched)
+				if (matchedList.size() >= VirtualAppInfoListUI.getItemCountToShow())
+				{
+					break;
+				}
+			}
+			for (AppInfoItem each : AppInfoManager.getInstance().getAppInfoList())
+			{
+				if (this.isCancelled())
+				{
+					return null;
+				}
+
+				if (matchedList.contains(each))
+				{
+					continue;
+				}
+
+				// only for those requently used we enable loosely match. The
+				// magic number 10 is a random choosed one.
+				if (each.getCount() <= 10)
+				{
+					continue;
+				}
+
+				if (match(each.getLabel().toString(), params[0], SearchLevel.loosely))
 				{
 					matchedList.add(each);
 				}
@@ -98,16 +128,16 @@ public class SearchManager
 			}
 		}
 
-		private boolean match(String packageName, String string)
+		private boolean match(String packageName, String string, SearchLevel searchLevel)
 		{
-			if (doSimpleMatch(packageName, string))
+			if (doSimpleMatch(packageName, string, searchLevel))
 			{
 				return true;
 			}
 
 			for (String xx : PinYinBridge.getHanyuPinyin(packageName))
 			{
-				if (doSimpleMatch(xx, string))
+				if (doSimpleMatch(xx, string, searchLevel))
 				{
 					return true;
 				}
@@ -115,7 +145,7 @@ public class SearchManager
 			return false;
 		}
 
-		private boolean doSimpleMatch(String packageName, String string)
+		private boolean doSimpleMatch(String packageName, String string, SearchLevel searchLevel)
 		{
 			char[] aaa = packageName.toLowerCase(Locale.getDefault()).toCharArray();
 			char[] bbb = string.toLowerCase(Locale.getDefault()).toCharArray();
@@ -125,7 +155,9 @@ public class SearchManager
 
 			while (iaaa < aaa.length && ibbb < bbb.length)
 			{
-				if (aaa[iaaa] == bbb[ibbb])
+				final char ca = aaa[iaaa];
+				final char cb = bbb[ibbb];
+				if (charMatch(ca, cb, searchLevel))
 				{
 					iaaa++;
 					ibbb++;
@@ -137,6 +169,99 @@ public class SearchManager
 			}
 
 			return ibbb == bbb.length;
+		}
+
+		private boolean charMatch(final char a, final char b, SearchLevel searchLevel)
+		{
+			if (a == b)
+			{
+				return true;
+			}
+			if (searchLevel == SearchLevel.strictly)
+			{
+				return false;
+			}
+
+			return charMatchLoosely(a, b);
+		}
+
+		private boolean charMatchLoosely(final char a, final char b)
+		{
+			assert (a != b); // because of privious checking.
+			final int ia = charIndexForLoosingSearch(a);
+			final int ib = charIndexForLoosingSearch(b);
+
+			if (ia < 0 || ib < 0)
+			{
+				return false;
+			}
+
+			int delta = ia - ib;
+			return delta == 1 || delta == -1;
+		}
+
+		private int charIndexForLoosingSearch(char c)
+		{
+			switch (c)
+			{
+			case 'q':
+				return 10;
+			case 'w':
+				return 11;
+			case 'e':
+				return 12;
+			case 'r':
+				return 13;
+			case 't':
+				return 14;
+			case 'y':
+				return 15;
+			case 'u':
+				return 16;
+			case 'i':
+				return 17;
+			case 'o':
+				return 18;
+			case 'p':
+				return 19;
+
+			case 'a':
+				return 30;
+			case 's':
+				return 31;
+			case 'd':
+				return 32;
+			case 'f':
+				return 33;
+			case 'g':
+				return 34;
+			case 'h':
+				return 35;
+			case 'j':
+				return 36;
+			case 'k':
+				return 37;
+			case 'l':
+				return 38;
+
+			case 'z':
+				return 50;
+			case 'x':
+				return 51;
+			case 'c':
+				return 52;
+			case 'v':
+				return 53;
+			case 'b':
+				return 54;
+			case 'n':
+				return 55;
+			case 'm':
+				return 56;
+
+			default:
+				return -1;
+			}
 		}
 	}
 
