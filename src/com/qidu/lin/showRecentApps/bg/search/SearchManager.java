@@ -52,7 +52,6 @@ public class SearchManager
 
 	class SearchAsyncTask extends AsyncTask<String, AppInfoList, Void>
 	{
-		@SuppressWarnings("unchecked")
 		@Override
 		protected Void doInBackground(String... params)
 		{
