@@ -27,16 +27,21 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.EditText;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.qidu.lin.showRecentApps.R;
 import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
+import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoManager;
 import com.qidu.lin.showRecentApps.bg.search.SearchManager;
-import com.qidu.lin.showRecentApps.fg.RecentAppsAdapter.Decorater;
 
 public class RecentAppsActivity extends Activity
 {
@@ -112,6 +117,29 @@ public class RecentAppsActivity extends Activity
 
 		adapter = new RecentAppsAdapter(this);
 		((GridView) findViewById(R.id.gridView1)).setAdapter(adapter);
+		((GridView) findViewById(R.id.gridView1)).setOnItemLongClickListener(new OnItemLongClickListener()
+		{
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+			{
+				final AppInfoItem item = (AppInfoItem) adapter.getItem(position);
+				startManageApp(item);
+				return true;
+			}
+		});
+		((GridView) findViewById(R.id.gridView1)).setOnItemClickListener(new OnItemClickListener()
+		{
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+			{
+				final AppInfoItem item = (AppInfoItem) adapter.getItem(position);
+				Intent launchIntent = item.getLaunchIntent();
+				if (launchIntent != null)
+				{
+					finishWithIntent(launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+				}
+			}
+		});
 		adapter.setDecorater(new RecentAppsAdapter.Decorater()
 		{
 			@Override
@@ -164,4 +192,15 @@ public class RecentAppsActivity extends Activity
 		}
 	}
 
+	private void startManageApp(AppInfoItem xxx)
+	{
+		Intent intentToManageApp = xxx.getIntentToManageApp();
+		if (intentToManageApp != null)
+		{
+			Toast.makeText(this, R.string.tip_show_app_management, Toast.LENGTH_SHORT).show();
+			startActivity(intentToManageApp);
+			finish();
+		}
+
+	}
 }

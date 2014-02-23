@@ -18,15 +18,11 @@
  */
 package com.qidu.lin.showRecentApps.fg;
 
-import android.content.Intent;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.qidu.lin.showRecentApps.R;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
@@ -40,7 +36,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 	{
 		public abstract void decorate(AppInfoList appInfoList);
 	}
-	
+
 	private final static int countMax = 16;
 	private static View[] viewpool = new View[countMax];
 	private AppInfoList appInfoList = new AppInfoList();
@@ -56,7 +52,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 			viewpool[i] = recentAppsActivity.getLayoutInflater().inflate(R.layout.entry, null);
 		}
 	}
-	
+
 	public void setDecorater(Decorater decorater)
 	{
 		this.decorater = decorater;
@@ -102,32 +98,6 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 		((ImageView) convertView.findViewById(R.id.imageView1)).setImageDrawable(item.getIcon());
 		((TextView) convertView.findViewById(R.id.editText1)).setText(item.getLabel());
 		((TextView) convertView.findViewById(R.id.editText2)).setText("" + item.getCount());
-
-		convertView.setOnClickListener(new OnClickListener()
-		{
-
-			@Override
-			public void onClick(View arg0)
-			{
-				Intent launchIntent = item.getLaunchIntent();
-				if (launchIntent != null)
-				{
-					RecentAppsAdapter.this.recentAppsActivity.finishWithIntent(launchIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
-				}
-			}
-		});
-
-		convertView.setOnLongClickListener(new OnLongClickListener()
-		{
-
-			@Override
-			public boolean onLongClick(View arg0)
-			{
-				startManageApp(item);
-				return true;
-			}
-
-		});
 
 		return convertView;
 	}
@@ -178,7 +148,7 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 		this.appInfoList.clear();
 		this.appInfoList.addAll(result);
 		this.notifyDataSetChanged();
-		
+
 		// we also afford a chance to decorate to outside of this adapter.
 		if (decorater != null)
 		{
@@ -186,15 +156,4 @@ public class RecentAppsAdapter extends BaseAdapter implements AppInfoRefreshList
 		}
 	}
 
-	private void startManageApp(AppInfoItem xxx)
-	{
-		Intent intentToManageApp = xxx.getIntentToManageApp();
-		if (intentToManageApp != null)
-		{
-			Toast.makeText(recentAppsActivity, R.string.tip_show_app_management, Toast.LENGTH_SHORT).show();
-			recentAppsActivity.startActivity(intentToManageApp);
-			recentAppsActivity.finish();
-		}
-
-	}
 }
