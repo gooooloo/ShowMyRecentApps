@@ -3,7 +3,5 @@
 
     <solid android:color="@color/touchfeedback" />
 
-    <corners android:radius="12dp" >
-    </corners>
 
 </shape>
