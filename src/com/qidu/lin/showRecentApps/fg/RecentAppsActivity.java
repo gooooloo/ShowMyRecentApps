@@ -49,6 +49,7 @@ public class RecentAppsActivity extends Activity
 	private RecentAppsKeyboardAndTouchHelper keyboradAndTouchHelper = new RecentAppsKeyboardAndTouchHelper(this);
 	private Handler searchHandler = new Handler(Looper.getMainLooper());
 	private Runnable searchRunnable = null;
+	private AppCountTextDrawable appCountTextDrawable;
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev)
@@ -140,24 +141,23 @@ public class RecentAppsActivity extends Activity
 				}
 			}
 		});
+		final EditText searchView = (EditText) findViewById(R.id.searchView1);
 		adapter.setDecorater(new RecentAppsAdapter.Decorater()
 		{
 
 			@Override
 			public void decorate(AppInfoList appInfoList)
 			{
-				EditText et = (EditText) findViewById(R.id.searchView1);
-				AppCountTextDrawable right = new AppCountTextDrawable(RecentAppsActivity.this);
-				right.setAppCnt(appInfoList.size());
-				et.setCompoundDrawablePadding(0);
+				appCountTextDrawable.setAppCnt(appInfoList.size());
+				searchView.setCompoundDrawablePadding(0);
 				// we can't move this outside of decorate(), otherwise the
 				// padding goes wrong. I didnt' investigate more.
-				et.setCompoundDrawablesWithIntrinsicBounds(null, null, right, null);
+				searchView.setCompoundDrawablesWithIntrinsicBounds(null, null, appCountTextDrawable, null);
 			}
 		});
 
-		final EditText searchView = (EditText) findViewById(R.id.searchView1);
 		searchView.addTextChangedListener(getSearchTextWatcher());
+		appCountTextDrawable = new AppCountTextDrawable(RecentAppsActivity.this);
 
 		PackageManagerCache.setPm(getPackageManager());
 
