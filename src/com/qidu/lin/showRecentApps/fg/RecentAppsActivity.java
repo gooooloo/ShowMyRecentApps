@@ -149,15 +149,16 @@ public class RecentAppsActivity extends Activity
 			public void decorate(AppInfoList appInfoList)
 			{
 				appCountTextDrawable.setAppCnt(appInfoList.size());
-				searchView.setCompoundDrawablePadding(0);
-				// we can't move this outside of decorate(), otherwise the
-				// padding goes wrong. I didnt' investigate more.
+				// if I didn't call this ,then the padding goes wrong. I didn't
+				// investigate more.
 				searchView.setCompoundDrawablesWithIntrinsicBounds(null, null, appCountTextDrawable, null);
 			}
 		});
 
 		searchView.addTextChangedListener(getSearchTextWatcher());
 		appCountTextDrawable = new AppCountTextDrawable(RecentAppsActivity.this);
+		searchView.setCompoundDrawablePadding(0);
+		searchView.setCompoundDrawablesWithIntrinsicBounds(null, null, appCountTextDrawable, null);
 
 		PackageManagerCache.setPm(getPackageManager());
 
