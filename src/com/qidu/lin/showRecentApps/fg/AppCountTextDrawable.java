@@ -17,4 +17,9 @@ public class AppCountTextDrawable extends TextDrawable
 		setText("");
 	}
 
+	public void setAppCnt(int appCnt)
+	{
+		setText("" + appCnt);
+	}
+
 }
