@@ -35,21 +35,12 @@
     </EditText>
 
     <EditText
-        android:id="@+id/appCnt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/dummy"
-        android:enabled="false"
-        android:focusable="false" />
-
-    <EditText
         android:id="@+id/searchView1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
         android:layout_below="@id/dummy"
-        android:layout_toLeftOf="@id/appCnt"
         android:inputType="textVisiblePassword" >
     </EditText>
 
