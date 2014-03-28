@@ -147,8 +147,12 @@ public class RecentAppsActivity extends Activity
 			@Override
 			public void decorate(AppInfoList appInfoList)
 			{
-				((EditText) RecentAppsActivity.this.findViewById(R.id.appCnt)).setHint("" + appInfoList.size());
+				EditText et = (EditText) findViewById(R.id.searchView1);
+				TextDrawable right = new TextDrawable(RecentAppsActivity.this);
 				right.setText("" + appInfoList.size());
+				right.setTextColor(getResources().getColor(android.R.color.darker_gray));
+				et.setCompoundDrawablePadding(0);
+				et.setCompoundDrawablesWithIntrinsicBounds(null, null, right , null);
 			}
 		});
 
