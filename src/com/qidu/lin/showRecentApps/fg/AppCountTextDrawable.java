@@ -1,6 +1,7 @@
 package com.qidu.lin.showRecentApps.fg;
 
 import android.content.Context;
+import android.widget.EditText;
 
 public class AppCountTextDrawable extends TextDrawable
 {
@@ -12,8 +13,7 @@ public class AppCountTextDrawable extends TextDrawable
 
 	private void setDefaultUI(Context context)
 	{
-		int textColorResId = android.R.color.darker_gray;
-		setTextColor(context.getResources().getColor(textColorResId));
+		setTextColor(new EditText(context).getHintTextColors());
 		setText("");
 	}
 
