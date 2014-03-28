@@ -49,6 +49,7 @@ public class RecentAppsActivity extends Activity
 	private RecentAppsKeyboardAndTouchHelper keyboradAndTouchHelper = new RecentAppsKeyboardAndTouchHelper(this);
 	private Handler searchHandler = new Handler(Looper.getMainLooper());
 	private Runnable searchRunnable = null;
+	private AppCountTextDrawable right = null;
 
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev)
@@ -142,14 +143,20 @@ public class RecentAppsActivity extends Activity
 		});
 		adapter.setDecorater(new RecentAppsAdapter.Decorater()
 		{
+
 			@Override
 			public void decorate(AppInfoList appInfoList)
 			{
 				((EditText) RecentAppsActivity.this.findViewById(R.id.appCnt)).setHint("" + appInfoList.size());
+				right.setText("" + appInfoList.size());
 			}
 		});
 
-		((EditText) findViewById(R.id.searchView1)).addTextChangedListener(getSearchTextWatcher());
+		final EditText searchView = (EditText) findViewById(R.id.searchView1);
+		searchView.addTextChangedListener(getSearchTextWatcher());
+
+		right = new AppCountTextDrawable(RecentAppsActivity.this);
+		searchView.setCompoundDrawablesWithIntrinsicBounds(null, null, right, null);
 
 		PackageManagerCache.setPm(getPackageManager());
 
