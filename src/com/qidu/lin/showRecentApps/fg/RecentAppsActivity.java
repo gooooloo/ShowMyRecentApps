@@ -20,6 +20,9 @@
 package com.qidu.lin.showRecentApps.fg;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -121,10 +124,38 @@ public class RecentAppsActivity extends Activity
 		((GridView) findViewById(R.id.gridView1)).setOnItemLongClickListener(new OnItemLongClickListener()
 		{
 			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int position, long arg3)
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int position, long arg3)
 			{
-				final AppInfoItem item = (AppInfoItem) adapter.getItem(position);
-				startManageApp(item);
+				final Context context = RecentAppsActivity.this;
+
+				final int index_app_info = 0;
+				final int index_add_to_blacklist = 1;
+				final int index_setting = 2;
+				final int index_count = index_setting + 1;
+				CharSequence[] xx = new CharSequence[index_count];
+				xx[index_app_info] = context.getString(R.string.app_info);
+				xx[index_add_to_blacklist] = context.getString(R.string.add_to_blacklist);
+				xx[index_setting] = context.getString(R.string.settings);
+
+				new AlertDialog.Builder(context).setItems(xx, new android.content.DialogInterface.OnClickListener()
+				{
+					@Override
+					public void onClick(DialogInterface dialog, int which)
+					{
+						if (which == index_app_info)
+						{
+							final AppInfoItem item = (AppInfoItem) adapter.getItem(position);
+							startManageApp(item);
+						}
+						else if (which == index_add_to_blacklist)
+						{
+						}
+						else if (which == index_setting)
+						{
+						}
+					}
+				}).show();
+
 				return true;
 			}
 		});

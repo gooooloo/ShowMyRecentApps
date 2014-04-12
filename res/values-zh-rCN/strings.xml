@@ -6,5 +6,8 @@
     <string name="hint_when_keyboard_is_hidden">下拉弹出键盘</string>
     <string name="title_activity_test_get_recent_apps">@string/app_name</string>
     <string name="title_activity_empty">EMPTYActivity</string>
+    <string name="app_info">查看应用信息</string>
+    <string name="add_to_blacklist">不再显示</string>
+    <string name="settings">设置</string>
 
 </resources>

@@ -6,5 +6,8 @@
     <string name="tip_show_app_management">it may take a while to show application information</string>
     <string name="hint_when_keyboard_is_shown">search app, incomplete spelling is OK</string>
     <string name="hint_when_keyboard_is_hidden">slide down to show keyboard</string>
+    <string name="app_info">App Info</string>
+    <string name="add_to_blacklist">Don\'t show anymore</string>
+    <string name="settings">Settings</string>
 
 </resources>
