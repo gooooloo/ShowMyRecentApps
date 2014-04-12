@@ -54,7 +54,15 @@ public class AppInfoManager
 			packageLabels.add(appInfo);
 		}
 	}
-	
+
+	private void removePackageLabel(AppInfoItem appInfo)
+	{
+		synchronized (packageLabels)
+		{
+			packageLabels.remove(appInfo);
+		}
+	}
+
 	public void clearPackageLabel()
 	{
 		synchronized (packageLabels)
@@ -91,6 +99,12 @@ public class AppInfoManager
 	public void deleteListener(AppInfoRefreshListener testGetRecentApps)
 	{
 		listeners.remove(testGetRecentApps);
+	}
+
+	public void addAppInfoToBlackList(final Activity activity, AppInfoItem item)
+	{
+		AppInfoBlackList.addToBlackList(item.getPackageName(), activity);
+		removePackageLabel(item);
 	}
 
 	public void refreshAsynchronized(final Activity activity)

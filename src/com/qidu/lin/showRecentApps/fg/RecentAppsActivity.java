@@ -149,11 +149,15 @@ public class RecentAppsActivity extends Activity
 						}
 						else if (which == index_add_to_blacklist)
 						{
+							final AppInfoItem item = (AppInfoItem) adapter.getItem(position);
+							AppInfoManager.getInstance().addAppInfoToBlackList(RecentAppsActivity.this, item);
+							RecentAppsActivity.this.finish();
 						}
 						else if (which == index_setting)
 						{
 						}
 					}
+
 				}).show();
 
 				return true;

@@ -105,4 +105,11 @@ public class AppInfoBlackList
 	{
 		sp.edit().putString("packageNames", makeListString(packageNames)).commit();
 	}
+	
+	public static void addToBlackList(String packageName, Context context)
+	{
+		Set<String> blacklist = getBlackList();
+		blacklist.add(packageName);
+		setBlackList(blacklist, context);
+	}
 }
