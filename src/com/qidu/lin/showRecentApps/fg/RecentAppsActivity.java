@@ -40,7 +40,6 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.qidu.lin.showRecentApps.R;
-import com.qidu.lin.showRecentApps.SettingsActivity;
 import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;

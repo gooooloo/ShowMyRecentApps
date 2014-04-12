@@ -36,7 +36,7 @@
             android:theme="@style/MyTransparent" >
         </activity>
         <activity
-            android:name="com.qidu.lin.showRecentApps.SettingsActivity"
+            android:name="com.qidu.lin.showRecentApps.fg.SettingsActivity"
             android:excludeFromRecents="true"
             android:taskAffinity="a.b.c.d.e.f.f.e.a.sd.sdf"
             android:label="@string/title_activity_settings" >
