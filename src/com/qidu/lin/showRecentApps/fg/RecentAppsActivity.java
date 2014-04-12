@@ -40,6 +40,7 @@ import android.widget.GridView;
 import android.widget.Toast;
 
 import com.qidu.lin.showRecentApps.R;
+import com.qidu.lin.showRecentApps.SettingsActivity;
 import com.qidu.lin.showRecentApps.bg.PackageManagerCache;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoItem;
 import com.qidu.lin.showRecentApps.bg.appInfo.AppInfoList;
@@ -155,6 +156,8 @@ public class RecentAppsActivity extends Activity
 						}
 						else if (which == index_setting)
 						{
+							startActivity(new Intent(RecentAppsActivity.this, SettingsActivity.class)
+									.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 						}
 					}
 

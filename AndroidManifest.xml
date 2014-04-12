@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.qidu.lin.showRecentApps"
     android:versionCode="8"
@@ -10,9 +11,9 @@
     <uses-permission android:name="android.permission.GET_TASKS" />
 
     <application
+        android:allowBackup="true"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
-        android:allowBackup="true"
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.qidu.lin.showRecentApps.fg.RecentAppsActivity"
@@ -33,6 +34,12 @@
             android:launchMode="singleInstance"
             android:taskAffinity="a.b.c.d.e.f.f.e.a"
             android:theme="@style/MyTransparent" >
+        </activity>
+        <activity
+            android:name="com.qidu.lin.showRecentApps.SettingsActivity"
+            android:excludeFromRecents="true"
+            android:taskAffinity="a.b.c.d.e.f.f.e.a.sd.sdf"
+            android:label="@string/title_activity_settings" >
         </activity>
     </application>
 
