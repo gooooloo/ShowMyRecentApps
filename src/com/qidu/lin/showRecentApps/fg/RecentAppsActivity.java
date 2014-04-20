@@ -131,11 +131,11 @@ public class RecentAppsActivity extends Activity
 				final int index_app_info = 0;
 				final int index_add_to_blacklist = 1;
 				final int index_setting = 2;
-				final int index_count = index_setting + 1;
+				final int index_count = index_add_to_blacklist + 1;
 				CharSequence[] xx = new CharSequence[index_count];
 				xx[index_app_info] = context.getString(R.string.app_info);
 				xx[index_add_to_blacklist] = context.getString(R.string.add_to_blacklist);
-				xx[index_setting] = context.getString(R.string.settings);
+//				xx[index_setting] = context.getString(R.string.settings);
 
 				new AlertDialog.Builder(context).setItems(xx, new android.content.DialogInterface.OnClickListener()
 				{
@@ -155,8 +155,9 @@ public class RecentAppsActivity extends Activity
 						}
 						else if (which == index_setting)
 						{
-							startActivity(new Intent(RecentAppsActivity.this, SettingsActivity.class)
-									.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+							// TODO: finish the Setting Activity and enable it.
+//							startActivity(new Intent(RecentAppsActivity.this, SettingsActivity.class)
+//									.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
 						}
 					}
 
